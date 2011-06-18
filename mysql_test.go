@@ -13,7 +13,7 @@ func TestMySQL_GetLiteral(t *testing.T) {
 	s := v.GetLiteral(*l)
 	if s != "\"te\\\"st\"" {
 		t.Log(s)
-    t.Errorf("failed test string")
+		t.Errorf("failed test string")
 	}
 
 }
