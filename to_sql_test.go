@@ -137,15 +137,21 @@ func TestGetAs(t *testing.T) {
 		t.Errorf("failed to get As ")
 	}
 }
+
 func TestGetGreaterThan(t *testing.T) {
 	v := new(ToSql)
 	n := new(GreaterThan)
 
+	n.left = Literal{1}
+	n.right = Literal{2}
+
 	s := v.GetGreaterThan(*n)
-	if s != "" {
+	if s != "1 > 2" {
+		t.Log(s)
 		t.Errorf("failed to get GreaterThan ")
 	}
 }
+
 func TestGetGreaterThanOrEqual(t *testing.T) {
 	v := new(ToSql)
 	n := new(GreaterThanOrEqual)
