@@ -169,8 +169,12 @@ func TestGetLessThan(t *testing.T) {
 	v := new(ToSql)
 	n := new(LessThan)
 
+	n.left = Literal{1}
+	n.right = Literal{2}
+
 	s := v.GetLessThan(*n)
-	if s != "" {
+	if s != "1 < 2" {
+		t.Log(s)
 		t.Errorf("failed to get LessThan ")
 	}
 }
