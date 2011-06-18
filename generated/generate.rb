@@ -212,12 +212,12 @@ func (b #{type}) VisitNodes(nodes []Node) (s string) {
 #   return
 # '
           s = "  ls := \"\"
-  if (n.left != nil) {
+  if n.left != nil {
     ls = n.left.Visit(c)
   }
   
   rs := \"\"
-  if (n.right != nil) {
+  if n.right != nil {
     rs = n.right.Visit(c)
   }
   
