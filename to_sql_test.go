@@ -156,8 +156,12 @@ func TestGetGreaterThanOrEqual(t *testing.T) {
 	v := new(ToSql)
 	n := new(GreaterThanOrEqual)
 
+	n.left = Literal{2}
+	n.right = Literal{1}
+
 	s := v.GetGreaterThanOrEqual(*n)
-	if s != "" {
+	if s != "2 >= 1" {
+		t.Log(s)
 		t.Errorf("failed to get GreaterThanOrEqual ")
 	}
 }

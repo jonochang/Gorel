@@ -162,7 +162,7 @@ func (c ToSql) GetGreaterThanOrEqual(n GreaterThanOrEqual) (s string) {
 		rs = n.right.Visit(c)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("%v >= %v", ls, rs)
 	return
 }
 
