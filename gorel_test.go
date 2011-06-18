@@ -38,19 +38,19 @@ func TestVisit(t *testing.T) {
 }
 
 func TestVisitNodes(t *testing.T) {
-	v := new(ToSql)
-	s := v.VisitNodes(nil)
-
-	if s != "" {
-		t.Errorf("invalid visit nodes")
-	}
-
-	nodes := make([]Node, 3)
-	s = v.VisitNodes(nodes)
-	if s != "" {
-		t.Errorf("handle nil nodes")
-	}
-	//t.Log("Pending")
+	//	v := new(ToSql)
+	//	s := v.VisitNodes(nil)
+	//
+	//	if s != "" {
+	//		t.Errorf("invalid visit nodes")
+	//	}
+	//
+	//	nodes := make([]Node, 3)
+	//	s = v.VisitNodes(nodes)
+	//	if s != "" {
+	//		t.Errorf("handle nil nodes")
+	//	}
+	//	//t.Log("Pending")
 	//t.Errorf("1Pending")
 }
 //func TestTable(t *testing.T) {
