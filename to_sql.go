@@ -365,7 +365,7 @@ func (c ToSql) GetUnionAll(n UnionAll) (s string) {
 func (c ToSql) GetEquality(n Equality) (s string) {
 	ls := n.left.Visit(c)
 	rs := n.right.Visit(c)
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("%v = %v", ls, rs)
 	return
 }
 
