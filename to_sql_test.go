@@ -57,8 +57,13 @@ func TestGetAnd(t *testing.T) {
 	v := new(ToSql)
 	n := new(And)
 
+	n1 := Literal{1}
+	n2 := Literal{2}
+	n3 := Literal{3}
+	n.children = []Node{n1, n2, n3}
+
 	s := v.GetAnd(*n)
-	if s != "1 = 2" {
+	if s != "1 AND 2 AND 3" {
 		t.Errorf("failed to get And")
 	}
 }
