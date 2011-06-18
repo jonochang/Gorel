@@ -41,18 +41,27 @@ func TestVisitNilNodes(t *testing.T) {
 	v := new(ToSql)
 	s := v.VisitNodes(nil)
 
-	if s != "" {
+	if len(s) != 0 {
 		t.Errorf("failed to visit nil nodes")
 	}
 
 	nodes := make([]Node, 3)
 	s = v.VisitNodes(nodes)
-	if s != "" {
+	if len(s) != 0 {
 		t.Errorf("failed to skip nil nodes")
 	}
 }
 
 //-----------------And----------------
+func TestGetAnd(t *testing.T) {
+	v := new(ToSql)
+	n := new(And)
+
+	s := v.GetAnd(*n)
+	if s != "1 = 2" {
+		t.Errorf("failed to get And")
+	}
+}
 
 //-----------------Binary----------------
 func TestGetBetween(t *testing.T) {

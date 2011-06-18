@@ -172,15 +172,19 @@ func (c #{type}) GetLiteral(n Literal) (s string) {
   return
 }
 
-func (b #{type}) VisitNodes(nodes []Node) (s string) {
-  s = \"\"
-  results := make([]string, 0)
+func (b #{type}) VisitNodes(nodes []Node) (s []string) {
+  s = make([]string, 0)
   for i:=0; i < len(nodes); i++ {
     if (nodes[i] != nil) {
-      results = append(results, nodes[i].Visit(b))
+      s = append(s, nodes[i].Visit(b))
     }
   }
-  s = strings.Join(results, \", \")
+  return
+}
+
+func (b #{type}) VisitNodesString(nodes []Node, sep string) (s string) {
+  results := b.VisitNodes(nodes)
+  s = strings.Join(results, sep)
   return
 }
 "
@@ -208,7 +212,8 @@ func (b #{type}) VisitNodes(nodes []Node) (s string) {
       File.open(filename, 'a') {|f| f.write(s) }
     when :And
       s = "func (c #{type}) GetAnd(n And) (s string) {
-  s = c.VisitNodes(nodes)
+  results := c.VisitNodes(n.children)
+  s = strings.Join(results, \" AND \")
   return
 }\n
 "
@@ -247,7 +252,7 @@ func (b #{type}) VisitNodes(nodes []Node) (s string) {
           File.open(filename, 'a') {|f| f.write(s) }
 
         when :Function
-          s = "  expressions := c.VisitNodes(n.expressions)
+          s = "  expressions := c.VisitNodesString(n.expressions, \", \")
   alias := n.alias.Visit(c)
   distinct := n.distinct
   s = fmt.Sprintf(\"%v * %v * %v\", expressions, alias, distinct)
@@ -305,13 +310,13 @@ def generate_visitor_test filename, type
     v := new(#{type})
   	s := v.VisitNodes(nil)
 
-  	if s != \"\" {
+  	if len(s) != 0 {
   		t.Errorf(\"failed to visit nil nodes\")
   	}
 
   	nodes := make([]Node, 3)
   	s = v.VisitNodes(nodes)
-  	if s != \"\" {
+  	if len(s) != 0 {
   		t.Errorf(\"failed to skip nil nodes\")
   	}
   }
@@ -347,7 +352,18 @@ def generate_visitor_test filename, type
       t.Errorf(\"failed to get Equality\")
     }
 }\n
-  "
+"
+        File.open(filename, 'a') {|f| f.write(s) }
+      when :And
+        s = "func TestGetAnd(t *testing.T) {
+    v := new(#{type})
+    n := new(And)
+    
+    s := v.GetAnd(*n)
+    if s != \"1 = 2\" {
+      t.Errorf(\"failed to get And\")
+    }
+}\n"
         File.open(filename, 'a') {|f| f.write(s) }
       end
 

@@ -32,21 +32,26 @@ func (c ToSql) GetLiteral(n Literal) (s string) {
 	return
 }
 
-func (b ToSql) VisitNodes(nodes []Node) (s string) {
-	s = ""
-	results := make([]string, 0)
+func (b ToSql) VisitNodes(nodes []Node) (s []string) {
+	s = make([]string, 0)
 	for i := 0; i < len(nodes); i++ {
 		if nodes[i] != nil {
-			results = append(results, nodes[i].Visit(b))
+			s = append(s, nodes[i].Visit(b))
 		}
 	}
-	s = strings.Join(results, ", ")
+	return
+}
+
+func (b ToSql) VisitNodesString(nodes []Node, sep string) (s string) {
+	results := b.VisitNodes(nodes)
+	s = strings.Join(results, sep)
 	return
 }
 
 //-----------------And----------------
 func (c ToSql) GetAnd(n And) (s string) {
-	s = c.VisitNodes(n.children)
+	results := c.VisitNodes(n.children)
+	s = strings.Join(results, " AND ")
 	return
 }
 
@@ -379,7 +384,7 @@ func (c ToSql) GetIn(n In) (s string) {
 
 //-----------------Function----------------
 func (c ToSql) GetCount(n Count) (s string) {
-	expressions := c.VisitNodes(n.expressions)
+	expressions := c.VisitNodesString(n.expressions, ", ")
 	alias := n.alias.Visit(c)
 	distinct := n.distinct
 	s = fmt.Sprintf("%v * %v * %v", expressions, alias, distinct)
@@ -388,7 +393,7 @@ func (c ToSql) GetCount(n Count) (s string) {
 }
 
 func (c ToSql) GetSum(n Sum) (s string) {
-	expressions := c.VisitNodes(n.expressions)
+	expressions := c.VisitNodesString(n.expressions, ", ")
 	alias := n.alias.Visit(c)
 	distinct := n.distinct
 	s = fmt.Sprintf("%v * %v * %v", expressions, alias, distinct)
@@ -397,7 +402,7 @@ func (c ToSql) GetSum(n Sum) (s string) {
 }
 
 func (c ToSql) GetExists(n Exists) (s string) {
-	expressions := c.VisitNodes(n.expressions)
+	expressions := c.VisitNodesString(n.expressions, ", ")
 	alias := n.alias.Visit(c)
 	distinct := n.distinct
 	s = fmt.Sprintf("%v * %v * %v", expressions, alias, distinct)
@@ -406,7 +411,7 @@ func (c ToSql) GetExists(n Exists) (s string) {
 }
 
 func (c ToSql) GetMax(n Max) (s string) {
-	expressions := c.VisitNodes(n.expressions)
+	expressions := c.VisitNodesString(n.expressions, ", ")
 	alias := n.alias.Visit(c)
 	distinct := n.distinct
 	s = fmt.Sprintf("%v * %v * %v", expressions, alias, distinct)
@@ -415,7 +420,7 @@ func (c ToSql) GetMax(n Max) (s string) {
 }
 
 func (c ToSql) GetMin(n Min) (s string) {
-	expressions := c.VisitNodes(n.expressions)
+	expressions := c.VisitNodesString(n.expressions, ", ")
 	alias := n.alias.Visit(c)
 	distinct := n.distinct
 	s = fmt.Sprintf("%v * %v * %v", expressions, alias, distinct)
@@ -424,7 +429,7 @@ func (c ToSql) GetMin(n Min) (s string) {
 }
 
 func (c ToSql) GetAvg(n Avg) (s string) {
-	expressions := c.VisitNodes(n.expressions)
+	expressions := c.VisitNodesString(n.expressions, ", ")
 	alias := n.alias.Visit(c)
 	distinct := n.distinct
 	s = fmt.Sprintf("%v * %v * %v", expressions, alias, distinct)
