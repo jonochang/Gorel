@@ -281,7 +281,7 @@ func (c ToSql) GetNotIn(n NotIn) (s string) {
 		rs = n.right.Visit(c)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("%v NOT IN (%v)", ls, rs)
 	return
 }
 

@@ -250,8 +250,11 @@ func TestGetNotIn(t *testing.T) {
 	v := new(ToSql)
 	n := new(NotIn)
 
+	n.left = Literal{"abc"}
+	n.right = Literal{[]string{"1", "2", "3", "4"}}
 	s := v.GetNotIn(*n)
-	if s != "" {
+	if s != "\"abc\" NOT IN (\"1\",\"2\",\"3\",\"4\")" {
+		t.Log(s)
 		t.Errorf("failed to get NotIn ")
 	}
 }
