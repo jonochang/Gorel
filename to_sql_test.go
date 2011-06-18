@@ -198,11 +198,16 @@ func TestGetMatches(t *testing.T) {
 	v := new(ToSql)
 	n := new(Matches)
 
+	n.left = Literal{2}
+	n.right = Literal{1}
+
 	s := v.GetMatches(*n)
-	if s != "" {
+	if s != "2 LIKE 1" {
+		t.Log(s)
 		t.Errorf("failed to get Matches ")
 	}
 }
+
 func TestGetDoesNotMatch(t *testing.T) {
 	v := new(ToSql)
 	n := new(DoesNotMatch)
