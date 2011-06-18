@@ -52,6 +52,8 @@ func TestVisitNilNodes(t *testing.T) {
 	}
 }
 
+//-----------------And----------------
+
 //-----------------Binary----------------
 func TestGetBetween(t *testing.T) {
 	v := new(ToSql)
@@ -87,15 +89,6 @@ func TestGetOr(t *testing.T) {
 	s := v.GetOr(*n)
 	if s != "" {
 		t.Errorf("failed to get Or ")
-	}
-}
-func TestGetAnd(t *testing.T) {
-	v := new(ToSql)
-	n := new(And)
-
-	s := v.GetAnd(*n)
-	if s != "" {
-		t.Errorf("failed to get And ")
 	}
 }
 func TestGetAs(t *testing.T) {

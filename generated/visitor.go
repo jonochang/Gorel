@@ -3,13 +3,15 @@ package gorel
 type Visitor interface {
 	GetLiteral(n Literal) string
 	GetEquality(n Equality) string
+	GetAnd(n And) string
+
+	//-----------------And----------------
 
 	//-----------------Binary----------------
 	GetBetween(n Between) string
 	GetNotEqual(n NotEqual) string
 	GetAssignment(n Assignment) string
 	GetOr(n Or) string
-	GetAnd(n And) string
 	GetAs(n As) string
 	GetGreaterThan(n GreaterThan) string
 	GetGreaterThanOrEqual(n GreaterThanOrEqual) string

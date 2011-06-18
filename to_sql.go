@@ -44,6 +44,13 @@ func (b ToSql) VisitNodes(nodes []Node) (s string) {
 	return
 }
 
+//-----------------And----------------
+func (c ToSql) GetAnd(n And) (s string) {
+	s = c.VisitNodes(n.children)
+	return
+}
+
+
 //-----------------Binary----------------
 func (c ToSql) GetBetween(n Between) (s string) {
 	ls := ""
@@ -91,21 +98,6 @@ func (c ToSql) GetAssignment(n Assignment) (s string) {
 }
 
 func (c ToSql) GetOr(n Or) (s string) {
-	ls := ""
-	if n.left != nil {
-		ls = n.left.Visit(c)
-	}
-
-	rs := ""
-	if n.right != nil {
-		rs = n.right.Visit(c)
-	}
-
-	s = fmt.Sprintf("%v * %v", ls, rs)
-	return
-}
-
-func (c ToSql) GetAnd(n And) (s string) {
 	ls := ""
 	if n.left != nil {
 		ls = n.left.Visit(c)

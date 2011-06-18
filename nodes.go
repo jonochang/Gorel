@@ -13,6 +13,10 @@ func (n Literal) Visit(v Visitor) (s string) {
 	return
 }
 
+type And struct {
+	children []Node
+}
+
 type Binary struct {
 	left  Node
 	right Node
@@ -36,6 +40,8 @@ type Join struct{ Binary }
 type Unary struct {
 	expression Node
 }
+
+//-----------------And----------------
 
 //-----------------Binary----------------
 type Between struct{ Binary }
@@ -63,13 +69,6 @@ type Or struct{ Binary }
 
 func (n Or) Visit(v Visitor) (s string) {
 	s = v.GetOr(n)
-	return
-}
-
-type And struct{ Binary }
-
-func (n And) Visit(v Visitor) (s string) {
-	s = v.GetAnd(n)
 	return
 }
 

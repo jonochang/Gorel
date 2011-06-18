@@ -50,8 +50,8 @@ func TestVisitNodes(t *testing.T) {
 	if s != "" {
 		t.Errorf("handle nil nodes")
 	}
-	t.Log("Pending")
-	t.Errorf("1Pending")
+	//t.Log("Pending")
+	//t.Errorf("1Pending")
 }
 //func TestTable(t *testing.T) {
 //	conn := GetConnection()

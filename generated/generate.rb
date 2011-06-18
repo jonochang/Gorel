@@ -25,10 +25,11 @@ end
 [:Join, :InnerJoin, :OuterJoin, :StringJoin]] 
 
 @child_list = {
-:Binary => [:Between, :NotEqual, :Assignment, :Or, :And, :As, :GreaterThan, :GreaterThanOrEqual, :LessThan, :LessThanOrEqual, :Matches, :DoesNotMatch, :NotIn, :Ordering, :Values, :DeleteStatement, :TableAlias, :Except, :Intersect, :Union, :UnionAll],
+:Binary => [:Between, :NotEqual, :Assignment, :Or, :As, :GreaterThan, :GreaterThanOrEqual, :LessThan, :LessThanOrEqual, :Matches, :DoesNotMatch, :NotIn, :Ordering, :Values, :DeleteStatement, :TableAlias, :Except, :Intersect, :Union, :UnionAll],
 :Unary => [:Not, :Lock, :Offset, :Limit, :Top, :Having, :UnqualifiedColumn, :Group, :Grouping, :On],
 :Equality => [:In],
 :Function => [:Count, :Sum, :Exists, :Max, :Min, :Avg],
+:And => [],
 :Join => [:InnerJoin, :OuterJoin, :StringJoin] 
 }
 
@@ -54,6 +55,11 @@ type Function struct {
   :Join => "
 type Join struct {Binary}
 ",
+  :And => "
+type And struct {
+  children []Node
+}
+", 
   :Equality => "
 type Equality struct {Binary}
 
@@ -114,6 +120,7 @@ func (n #{child}) Visit(v Visitor) (s string) {
 type Visitor interface {
   GetLiteral(n Literal) string
   GetEquality(n Equality) string
+  GetAnd(n And) string
 "
   File.open(visitor_file, 'w') {|f| f.write(visitor_interface) }
   puts "generating interface visitor..."
@@ -199,6 +206,13 @@ func (b #{type}) VisitNodes(nodes []Node) (s string) {
 }\n
 "
       File.open(filename, 'a') {|f| f.write(s) }
+    when :And
+      s = "func (c #{type}) GetAnd(n And) (s string) {
+  s = c.VisitNodes(nodes)
+  return
+}\n
+"
+            File.open(filename, 'a') {|f| f.write(s) }
     end
     
     children.each do |child|
