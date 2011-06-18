@@ -17,6 +17,11 @@ type And struct {
 	children []Node
 }
 
+func (n And) Visit(v Visitor) (s string) {
+	s = v.GetAnd(n)
+	return
+}
+
 type Binary struct {
 	left  Node
 	right Node

@@ -59,6 +59,11 @@ type Join struct {Binary}
 type And struct {
   children []Node
 }
+
+func (n And) Visit(v Visitor) (s string) {
+  s = v.GetAnd(n)
+  return
+}
 ", 
   :Equality => "
 type Equality struct {Binary}
