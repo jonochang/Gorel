@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"reflect"
 )
 
 type ToSql struct {
@@ -11,9 +12,14 @@ type ToSql struct {
 }
 
 func (c ToSql) GetLiteral(n Literal) (s string) {
-	switch val := n.value.(type) {
+	s = c.Convert(n.value)
+	return
+}
+
+func (c ToSql) Convert(unknown interface{}) (s string) {
+	switch val := unknown.(type) {
 	case string:
-		s = val
+		s = strconv.Quote(val)
 	case bool:
 		s = strconv.Btoa(val)
 	case int:
@@ -28,6 +34,44 @@ func (c ToSql) GetLiteral(n Literal) (s string) {
 		s = strconv.Ftoa32(val, 'f', -1)
 	case float64:
 		s = strconv.Ftoa64(val, 'f', -1)
+	default:
+		s = c.ConvertUnknown(unknown)
+	}
+	return
+}
+
+func (c ToSql) ConvertUnknown(unknown interface{}) (s string) {
+	unknownVal := reflect.ValueOf(unknown)
+	kind := unknownVal.Kind()
+	switch kind {
+	case reflect.Array, reflect.Slice:
+		results := make([]string, 0)
+		for i := 0; i < unknownVal.Len(); i++ {
+			results = append(results, c.ConvertVal(unknownVal.Index(i)))
+		}
+		s = strings.Join(results, ",")
+	}
+	return
+}
+func (c ToSql) ConvertVal(val reflect.Value) (s string) {
+	switch val.Kind() {
+	case reflect.Bool:
+		s = c.Convert(val.Bool())
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32,
+		reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16,
+		reflect.Uint32, reflect.Uint64:
+		s = c.Convert(val.Int())
+	case reflect.Float32, reflect.Float64:
+		s = c.Convert(val.Float())
+	case reflect.Array, reflect.Slice:
+		if val.Len() > 0 {
+			s = c.Convert(val.Slice(0, val.Len()))
+		}
+	case reflect.String:
+		s = c.Convert(val.String())
+	default:
+		panic(fmt.Sprintf("Cannot convert %v", val.Kind()))
+
 	}
 	return
 }

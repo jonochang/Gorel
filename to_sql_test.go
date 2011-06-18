@@ -11,7 +11,7 @@ func TestGetLiteral(t *testing.T) {
 	t.Log("Test string")
 	l.value = "test"
 	s := v.GetLiteral(*l)
-	if s != "test" {
+	if s != "\"test\"" {
 		t.Errorf("failed test string")
 	}
 
@@ -33,6 +33,30 @@ func TestGetLiteral(t *testing.T) {
 	l.value = 123.3
 	s = v.GetLiteral(*l)
 	if s != "123.3" {
+		t.Errorf("failed test float")
+	}
+
+	t.Log("Test Array of ints")
+	l.value = []int{1, 2, 3, 4}
+	s = v.GetLiteral(*l)
+	if s != "1,2,3,4" {
+		t.Log(s)
+		t.Errorf("failed test float")
+	}
+
+	t.Log("Test Array of ints")
+	l.value = []int{1, 2, 3, 4}
+	s = v.GetLiteral(*l)
+	if s != "1,2,3,4" {
+		t.Log(s)
+		t.Errorf("failed test float")
+	}
+
+	t.Log("Test Array of strings")
+	l.value = []string{"a", "bc", "d", "ef1"}
+	s = v.GetLiteral(*l)
+	if s != "\"a\",\"bc\",\"d\",\"ef1\"" {
+		t.Log(s)
 		t.Errorf("failed test float")
 	}
 }
@@ -231,6 +255,7 @@ func TestGetNotIn(t *testing.T) {
 		t.Errorf("failed to get NotIn ")
 	}
 }
+
 func TestGetOrdering(t *testing.T) {
 	v := new(ToSql)
 	n := new(Ordering)
