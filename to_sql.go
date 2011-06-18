@@ -83,7 +83,11 @@ func (c ToSql) GetNotEqual(n NotEqual) (s string) {
 		rs = n.right.Visit(c)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	if n.right == nil {
+		s = fmt.Sprintf("%v IS NOT NULL", ls)
+	} else {
+		s = fmt.Sprintf("%v != %v", ls, rs)
+	}
 	return
 }
 

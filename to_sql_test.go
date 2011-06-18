@@ -84,15 +84,26 @@ func TestGetBetween(t *testing.T) {
 		t.Errorf("failed to get Between ")
 	}
 }
+
 func TestGetNotEqual(t *testing.T) {
 	v := new(ToSql)
 	n := new(NotEqual)
+	n.left = Literal{1}
 
 	s := v.GetNotEqual(*n)
-	if s != "" {
-		t.Errorf("failed to get NotEqual ")
+	if s != "1 IS NOT NULL" {
+		t.Log(s)
+		t.Errorf("failed to get NotEqual null right")
+	}
+
+	n.right = Literal{2}
+	s = v.GetNotEqual(*n)
+	if s != "1 != 2" {
+		t.Log(s)
+		t.Errorf("failed to get NotEqual 1 != 2")
 	}
 }
+
 func TestGetAssignment(t *testing.T) {
 	v := new(ToSql)
 	n := new(Assignment)
