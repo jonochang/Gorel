@@ -26,9 +26,9 @@ func TestVisit(t *testing.T) {
   
   p := new(Literal)
   p.value = "p"
-  u := new(Unary)
+  u := new(Not)
   u.expression = p
-  join := new(Join)
+  join := new(InnerJoin)
   join.left = binary
   join.right = u
   
