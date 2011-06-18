@@ -165,6 +165,7 @@ func TestGetGreaterThanOrEqual(t *testing.T) {
 		t.Errorf("failed to get GreaterThanOrEqual ")
 	}
 }
+
 func TestGetLessThan(t *testing.T) {
 	v := new(ToSql)
 	n := new(LessThan)
@@ -178,15 +179,21 @@ func TestGetLessThan(t *testing.T) {
 		t.Errorf("failed to get LessThan ")
 	}
 }
+
 func TestGetLessThanOrEqual(t *testing.T) {
 	v := new(ToSql)
 	n := new(LessThanOrEqual)
 
+	n.left = Literal{2}
+	n.right = Literal{1}
+
 	s := v.GetLessThanOrEqual(*n)
-	if s != "" {
+	if s != "2 <= 1" {
+		t.Log(s)
 		t.Errorf("failed to get LessThanOrEqual ")
 	}
 }
+
 func TestGetMatches(t *testing.T) {
 	v := new(ToSql)
 	n := new(Matches)

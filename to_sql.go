@@ -192,7 +192,7 @@ func (c ToSql) GetLessThanOrEqual(n LessThanOrEqual) (s string) {
 		rs = n.right.Visit(c)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("%v <= %v", ls, rs)
 	return
 }
 
