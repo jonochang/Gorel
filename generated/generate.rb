@@ -260,28 +260,28 @@ def generate_visitor_test filename, type
           
     t.Log(\"Test string\")
     l.value = \"test\"
-    s = v.GetLiteral(l)
+    s := v.GetLiteral(*l)
     if s != \"test\" {
       t.Errorf(\"failed test string\")
     }
     
     t.Log(\"Test boolean\")
     l.value = false
-    s = v.GetLiteral(l)
+    s = v.GetLiteral(*l)
     if s != \"false\" {
       t.Errorf(\"failed test boolean\")
     }
     
     t.Log(\"Test int\")
     l.value = 123
-    s = v.GetLiteral(l)
+    s = v.GetLiteral(*l)
     if s != \"123\" {
       t.Errorf(\"failed test int\")
     }
     
     t.Log(\"Test float\")
     l.value = 123.3
-    s = v.GetLiteral(l)
+    s = v.GetLiteral(*l)
     if s != \"123.3\" {
       t.Errorf(\"failed test float\")
     }
@@ -319,11 +319,16 @@ def generate_visitor_test filename, type
         s = "func TestGetEquality(t *testing.T) {
     v := new(#{type})
     n := new(Equality)
-    n.left = new(Literal)
-    n.left.value = 1
-    n.right = new(Literal)
-    n.right.value = 2
-    s := v.GetEquality(n)
+    
+    ll := new(Literal)
+    ll.value = 1
+    n.left = ll
+    
+    rl := new(Literal)
+    rl.value = 2
+    n.right = rl
+    
+    s := v.GetEquality(*n)
     if s != \"1 = 2\" {
       t.Errorf(\"failed to get Equality\")
     }
@@ -338,8 +343,8 @@ def generate_visitor_test filename, type
   v := new(#{type})
   n := new(#{child})
   
-  s := v.Get#{child}(n)
-  if s!= \"\" {
+  s := v.Get#{child}(*n)
+  if s != \"\" {
     t.Errorf(\"failed to get #{child} \")
   }
 }
