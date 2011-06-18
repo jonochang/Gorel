@@ -13,8 +13,20 @@ func (c ToSql) GetLiteral(n Literal) (s string) {
   switch val := n.value.(type) {
     case string:
       s = val
+    case bool:
+      s = strconv.Btoa(val)
     case int:
       s = strconv.Itoa(val)
+    case int64:
+      s = strconv.Itoa64(val)      
+    case uint:
+      s = strconv.Uitoa(val)
+    case uint64:
+      s = strconv.Uitoa64(val)
+    case float32:
+      s = strconv.Ftoa32(val, 'f', -1)
+    case float64:
+      s = strconv.Ftoa64(val, 'f', -1)  
   }
   return
 }
@@ -23,7 +35,9 @@ func (b ToSql) VisitNodes(nodes []Node) (s string) {
   s = ""
   results := make([]string, 0)
   for i:=0; i < len(nodes); i++ {
-    results = append(results, nodes[i].Visit(b))
+    if (nodes[i] != nil) {
+      results = append(results, nodes[i].Visit(b))
+    }
   }
   s = strings.Join(results, ", ")
   return
