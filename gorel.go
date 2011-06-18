@@ -6,11 +6,6 @@ import (
 //"strconv"
 )
 
-type MySQL struct {
-	ToSql
-}
-
-
 func main() {
 }
 
