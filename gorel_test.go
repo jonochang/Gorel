@@ -14,30 +14,45 @@ const (
 )
 
 func TestVisit(t *testing.T) {
-  binary := new(Equality)
-  l := new(Literal)
-  l.value = "leftb"
-  binary.left = l
-  
-  
-  r := new(Literal)
-  r.value = "rightb"
-  binary.right = r
-  
-  p := new(Literal)
-  p.value = "p"
-  u := new(Not)
-  u.expression = p
-  join := new(InnerJoin)
-  join.left = binary
-  join.right = u
-  
-  v := new(MySQL)
-  //v.Visit(*join)
-  s := join.Visit(v)
-  fmt.Println(s)
+	binary := new(Equality)
+	l := new(Literal)
+	l.value = "leftb"
+	binary.left = l
+
+	r := new(Literal)
+	r.value = "rightb"
+	binary.right = r
+
+	p := new(Literal)
+	p.value = "p"
+	u := new(Not)
+	u.expression = p
+	join := new(InnerJoin)
+	join.left = binary
+	join.right = u
+
+	v := new(MySQL)
+	//v.Visit(*join)
+	s := join.Visit(v)
+	fmt.Println(s)
 }
 
+func TestVisitNodes(t *testing.T) {
+	v := new(ToSql)
+	s := v.VisitNodes(nil)
+
+	if s != "" {
+		t.Errorf("invalid visit nodes")
+	}
+
+	nodes := make([]Node, 3)
+	s = v.VisitNodes(nodes)
+	if s != "" {
+		t.Errorf("handle nil nodes")
+	}
+	t.Log("Pending")
+	t.Errorf("1Pending")
+}
 //func TestTable(t *testing.T) {
 //	conn := GetConnection()
 //	table := conn.Table("users")

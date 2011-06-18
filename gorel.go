@@ -1,13 +1,13 @@
 package gorel
 
 import (
-  //"fmt"
-  //"reflect"
-  //"strconv"
+//"fmt"
+//"reflect"
+//"strconv"
 )
 
 type MySQL struct {
-  ToSql
+	ToSql
 }
 
 
@@ -45,4 +45,3 @@ func main() {
 //    fmt.Println(sf)
 //  }
 //}
-
