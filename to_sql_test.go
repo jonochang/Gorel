@@ -64,6 +64,7 @@ func TestGetAnd(t *testing.T) {
 
 	s := v.GetAnd(*n)
 	if s != "1 AND 2 AND 3" {
+		t.Log(s)
 		t.Errorf("failed to get And")
 	}
 }
@@ -72,9 +73,14 @@ func TestGetAnd(t *testing.T) {
 func TestGetBetween(t *testing.T) {
 	v := new(ToSql)
 	n := new(Between)
+	n.left = Literal{1}
+	n.right = And{[]Node{
+		Literal{0},
+		Literal{3}}}
 
 	s := v.GetBetween(*n)
-	if s != "" {
+	if s != "1 BETWEEN 0 AND 3" {
+		t.Log(s)
 		t.Errorf("failed to get Between ")
 	}
 }

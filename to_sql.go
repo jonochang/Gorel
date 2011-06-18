@@ -68,7 +68,7 @@ func (c ToSql) GetBetween(n Between) (s string) {
 		rs = n.right.Visit(c)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("%v BETWEEN %v", ls, rs)
 	return
 }
 
