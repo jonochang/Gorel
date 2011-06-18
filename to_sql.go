@@ -117,7 +117,7 @@ func (c ToSql) GetOr(n Or) (s string) {
 		rs = n.right.Visit(c)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("%v OR %v", ls, rs)
 	return
 }
 

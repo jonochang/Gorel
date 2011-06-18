@@ -113,15 +113,21 @@ func TestGetAssignment(t *testing.T) {
 		t.Errorf("failed to get Assignment ")
 	}
 }
+
 func TestGetOr(t *testing.T) {
 	v := new(ToSql)
 	n := new(Or)
 
+	n.left = Literal{1}
+	n.right = Literal{2}
+
 	s := v.GetOr(*n)
-	if s != "" {
+	if s != "1 OR 2" {
+		t.Log(s)
 		t.Errorf("failed to get Or ")
 	}
 }
+
 func TestGetAs(t *testing.T) {
 	v := new(ToSql)
 	n := new(As)
