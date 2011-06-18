@@ -194,7 +194,7 @@ func (b #{type}) VisitNodes(nodes []Node) (s string) {
       s = "func (c #{type}) GetEquality(n Equality) (s string) {
   ls := n.left.Visit(c)
   rs := n.right.Visit(c)
-  s = fmt.Sprintf(\"%v * %v\", ls, rs)
+  s = fmt.Sprintf(\"%v = %v\", ls, rs)
   return
 }\n
 "
@@ -247,11 +247,116 @@ func (b #{type}) VisitNodes(nodes []Node) (s string) {
   end
 end
 
+def generate_visitor_test filename, type
+    header = "package gorel
+
+  import (
+    \"testing\"
+  )
+  
+  func TestGetLiteral(t *testing.T) {
+    v := new(#{type})
+    l := new(Literal)
+          
+    t.Log(\"Test string\")
+    l.value = \"test\"
+    s = v.GetLiteral(l)
+    if s != \"test\" {
+      t.Errorf(\"failed test string\")
+    }
+    
+    t.Log(\"Test boolean\")
+    l.value = false
+    s = v.GetLiteral(l)
+    if s != \"false\" {
+      t.Errorf(\"failed test boolean\")
+    }
+    
+    t.Log(\"Test int\")
+    l.value = 123
+    s = v.GetLiteral(l)
+    if s != \"123\" {
+      t.Errorf(\"failed test int\")
+    }
+    
+    t.Log(\"Test float\")
+    l.value = 123.3
+    s = v.GetLiteral(l)
+    if s != \"123.3\" {
+      t.Errorf(\"failed test float\")
+    }
+  }
+    
+  func TestVisitNilNodes(t *testing.T) {
+    v := new(#{type})
+  	s := v.VisitNodes(nil)
+
+  	if s != \"\" {
+  		t.Errorf(\"failed to visit nil nodes\")
+  	}
+
+  	nodes := make([]Node, 3)
+  	s = v.VisitNodes(nodes)
+  	if s != \"\" {
+  		t.Errorf(\"failed to skip nil nodes\")
+  	}
+  }
+"  
+  File.open(filename, 'w') {|f| f.write(header) }
+
+    @child_list.keys.sort.each do |parent|
+      children = @child_list[parent]
+      File.open(filename, 'a') {|f| f.write("\n//-----------------#{parent}----------------\n") }
+      case parent
+  #       when :Binary
+  #         s = "func (c #{type}) GetBinary(n Binary) (ls string, rs string) {
+  #   ls = n.left.Visit(c)
+  #   rs = n.right.Visit(c)
+  #   return
+  # }\n\n"
+  #         File.open(filename, 'a') {|f| f.write(s) }
+      when :Equality
+        s = "func TestGetEquality(t *testing.T) {
+    v := new(#{type})
+    n := new(Equality)
+    n.left = new(Literal)
+    n.left.value = 1
+    n.right = new(Literal)
+    n.right.value = 2
+    s := v.GetEquality(n)
+    if s != \"1 = 2\" {
+      t.Errorf(\"failed to get Equality\")
+    }
+}\n
+  "
+        File.open(filename, 'a') {|f| f.write(s) }
+      end
+
+      children.each do |child|
+        puts "generating function #{child} to satisfy Visitor interface"
+        s = "func TestGet#{child}(t *testing.T) {
+  v := new(#{type})
+  n := new(#{child})
+  
+  s := v.Get#{child}(n)
+  if s!= \"\" {
+    t.Errorf(\"failed to get #{child} \")
+  }
+}
+"
+        File.open(filename, 'a') {|f| f.write(s) }
+      end
+    end
+end
+
 case ARGV[0] 
   when "visitor"
     generate_visitor ARGV[1], ARGV[2]
+  when "visitor_test"
+    generate_visitor_test ARGV[1], ARGV[2]
   when "-h"
     puts "use generate.rb visitor [filename] [type] to create a new visitor template
+use generate.rb visitor_test [filename] [type] to create a new visitor test template
 use generate.rb to generate nodes and visitor interface
     "
   else
