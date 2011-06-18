@@ -197,11 +197,19 @@ func (b #{type}) VisitNodes(nodes []Node) (s string) {
 #   s = fmt.Sprintf("%v * %v", ls, rs)
 #   return
 # '
-          s = '  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
-  s = fmt.Sprintf("%v * %v", ls, rs)
+          s = "  ls := \"\"
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := \"\"
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
+  s = fmt.Sprintf(\"%v * %v\", ls, rs)
   return
-'
+"
           File.open(filename, 'a') {|f| f.write(s) }
           
         when :Unary

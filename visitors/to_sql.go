@@ -31,148 +31,316 @@ func (b ToSql) VisitNodes(nodes []Node) (s string) {
 
 //-----------------Binary----------------
 func (c ToSql) GetBetween(n Between) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetNotEqual(n NotEqual) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetAssignment(n Assignment) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetOr(n Or) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetAnd(n And) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetAs(n As) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetGreaterThan(n GreaterThan) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetGreaterThanOrEqual(n GreaterThanOrEqual) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetLessThan(n LessThan) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetLessThanOrEqual(n LessThanOrEqual) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetMatches(n Matches) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetDoesNotMatch(n DoesNotMatch) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetNotIn(n NotIn) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetOrdering(n Ordering) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetValues(n Values) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetDeleteStatement(n DeleteStatement) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetTableAlias(n TableAlias) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetExcept(n Except) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetIntersect(n Intersect) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetUnion(n Union) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetUnionAll(n UnionAll) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
@@ -187,8 +355,16 @@ func (c ToSql) GetEquality(n Equality) (s string) {
 }
 
 func (c ToSql) GetIn(n In) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
@@ -252,22 +428,46 @@ func (c ToSql) GetAvg(n Avg) (s string) {
 
 //-----------------Join----------------
 func (c ToSql) GetInnerJoin(n InnerJoin) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetOuterJoin(n OuterJoin) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
 
 func (c ToSql) GetStringJoin(n StringJoin) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := ""
+  if (n.left != nil) {
+    ls = n.left.Visit(c)
+  }
+  
+  rs := ""
+  if (n.right != nil) {
+    rs = n.right.Visit(c)
+  }
+  
   s = fmt.Sprintf("%v * %v", ls, rs)
   return
 }
