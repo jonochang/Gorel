@@ -80,7 +80,7 @@ func (n Equality) Visit(v Visitor) (s string) {
 }
 
 def generate_nodes_visitor
-  header = "package gorel
+  header = "package ast
 
 type Node interface {
   Visit(v Visitor) string
@@ -124,7 +124,7 @@ func (n #{child}) Visit(v Visitor) (s string) {
   end
 
   visitor_file = "generated/visitor.go"
-  visitor_interface = "package gorel
+  visitor_interface = "package ast
 
 type Visitor interface {
   GetLiteral(n Literal) string
