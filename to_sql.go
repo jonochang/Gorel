@@ -425,7 +425,7 @@ func (c ToSql) GetIn(n In) (s string) {
 		rs = n.right.Visit(c)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("%v IN (%v)", ls, rs)
 	return
 }
 

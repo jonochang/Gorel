@@ -351,8 +351,12 @@ func TestGetIn(t *testing.T) {
 	v := new(ToSql)
 	n := new(In)
 
+	n.left = Literal{"abc"}
+	n.right = Literal{[]string{"1", "2", "3", "4"}}
+
 	s := v.GetIn(*n)
-	if s != "" {
+	if s != "\"abc\" IN (\"1\",\"2\",\"3\",\"4\")" {
+		t.Log(s)
 		t.Errorf("failed to get In ")
 	}
 }
