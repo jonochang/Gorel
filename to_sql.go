@@ -557,8 +557,9 @@ func (c ToSql) GetLock(n Lock) (s string) {
 func (c ToSql) GetOffset(n Offset) (s string) {
 	expr := ""
 	if n.expression != nil {
-		n.expression.Visit(c)
+		expr = n.expression.Visit(c)
 	}
+	s = fmt.Sprintf("OFFSET %v", expr)
 	return s
 
 }

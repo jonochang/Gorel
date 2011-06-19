@@ -469,15 +469,20 @@ func TestGetLock(t *testing.T) {
 		t.Errorf("failed to get Lock ")
 	}
 }
+
 func TestGetOffset(t *testing.T) {
 	v := new(ToSql)
 	n := new(Offset)
 
+	n.expression = Literal{10}
+
 	s := v.GetOffset(*n)
-	if s != "" {
+	if s != "OFFSET 10" {
+		t.Log(s)
 		t.Errorf("failed to get Offset ")
 	}
 }
+
 func TestGetLimit(t *testing.T) {
 	v := new(ToSql)
 	n := new(Limit)
