@@ -1,4 +1,4 @@
-package gorel
+package ast
 
 type Node interface {
 	Visit(v Visitor) string
@@ -273,6 +273,7 @@ func (n Subtraction) Visit(v Visitor) (s string) {
 	s = v.GetSubtraction(n)
 	return
 }
+
 
 //-----------------Join----------------
 type InnerJoin struct{ Join }

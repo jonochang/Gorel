@@ -1,4 +1,4 @@
-package gorel
+package ast
 
 type Visitor interface {
 	GetLiteral(n Literal) string
