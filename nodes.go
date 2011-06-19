@@ -40,6 +40,8 @@ type Function struct {
 	distinct    bool
 }
 
+type InfixOperation struct{ Binary }
+
 type Join struct{ Binary }
 
 type Unary struct {
@@ -242,6 +244,35 @@ func (n Avg) Visit(v Visitor) (s string) {
 	return
 }
 
+
+//-----------------InfixOperation----------------
+type Multiplication struct{ InfixOperation }
+
+func (n Multiplication) Visit(v Visitor) (s string) {
+	s = v.GetMultiplication(n)
+	return
+}
+
+type Division struct{ InfixOperation }
+
+func (n Division) Visit(v Visitor) (s string) {
+	s = v.GetDivision(n)
+	return
+}
+
+type Addition struct{ InfixOperation }
+
+func (n Addition) Visit(v Visitor) (s string) {
+	s = v.GetAddition(n)
+	return
+}
+
+type Subtraction struct{ InfixOperation }
+
+func (n Subtraction) Visit(v Visitor) (s string) {
+	s = v.GetSubtraction(n)
+	return
+}
 
 //-----------------Join----------------
 type InnerJoin struct{ Join }

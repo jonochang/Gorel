@@ -486,6 +486,68 @@ func (c ToSql) GetAvg(n Avg) (s string) {
 }
 
 
+//-----------------InfixOperation----------------
+func (c ToSql) GetMultiplication(n Multiplication) (s string) {
+	ls := ""
+	if n.left != nil {
+		ls = n.left.Visit(c)
+	}
+
+	rs := ""
+	if n.right != nil {
+		rs = n.right.Visit(c)
+	}
+
+	s = fmt.Sprintf("%v * %v", ls, rs)
+	return
+}
+
+func (c ToSql) GetDivision(n Division) (s string) {
+	ls := ""
+	if n.left != nil {
+		ls = n.left.Visit(c)
+	}
+
+	rs := ""
+	if n.right != nil {
+		rs = n.right.Visit(c)
+	}
+
+	s = fmt.Sprintf("%v * %v", ls, rs)
+	return
+}
+
+func (c ToSql) GetAddition(n Addition) (s string) {
+	ls := ""
+	if n.left != nil {
+		ls = n.left.Visit(c)
+	}
+
+	rs := ""
+	if n.right != nil {
+		rs = n.right.Visit(c)
+	}
+
+	s = fmt.Sprintf("%v * %v", ls, rs)
+	return
+}
+
+func (c ToSql) GetSubtraction(n Subtraction) (s string) {
+	ls := ""
+	if n.left != nil {
+		ls = n.left.Visit(c)
+	}
+
+	rs := ""
+	if n.right != nil {
+		rs = n.right.Visit(c)
+	}
+
+	s = fmt.Sprintf("%v * %v", ls, rs)
+	return
+}
+
+
 //-----------------Join----------------
 func (c ToSql) GetInnerJoin(n InnerJoin) (s string) {
 	ls := ""

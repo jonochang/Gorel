@@ -417,6 +417,44 @@ func TestGetAvg(t *testing.T) {
 	}
 }
 
+//-----------------InfixOperation----------------
+func TestGetMultiplication(t *testing.T) {
+	v := new(ToSql)
+	n := new(Multiplication)
+
+	s := v.GetMultiplication(*n)
+	if s != "" {
+		t.Errorf("failed to get Multiplication ")
+	}
+}
+func TestGetDivision(t *testing.T) {
+	v := new(ToSql)
+	n := new(Division)
+
+	s := v.GetDivision(*n)
+	if s != "" {
+		t.Errorf("failed to get Division ")
+	}
+}
+func TestGetAddition(t *testing.T) {
+	v := new(ToSql)
+	n := new(Addition)
+
+	s := v.GetAddition(*n)
+	if s != "" {
+		t.Errorf("failed to get Addition ")
+	}
+}
+func TestGetSubtraction(t *testing.T) {
+	v := new(ToSql)
+	n := new(Subtraction)
+
+	s := v.GetSubtraction(*n)
+	if s != "" {
+		t.Errorf("failed to get Subtraction ")
+	}
+}
+
 //-----------------Join----------------
 func TestGetInnerJoin(t *testing.T) {
 	v := new(ToSql)

@@ -30,6 +30,7 @@ end
 :Equality => [:In],
 :Function => [:Count, :Sum, :Exists, :Max, :Min, :Avg],
 :And => [],
+:InfixOperation => [:Multiplication, :Division, :Addition, :Subtraction],
 :Join => [:InnerJoin, :OuterJoin, :StringJoin] 
 }
 
@@ -64,7 +65,10 @@ func (n And) Visit(v Visitor) (s string) {
   s = v.GetAnd(n)
   return
 }
-", 
+",
+  :InfixOperation => "
+type InfixOperation struct {Binary}
+",
   :Equality => "
 type Equality struct {Binary}
 
@@ -230,7 +234,7 @@ func (b #{type}) VisitNodesString(nodes []Node, sep string) (s string) {
       s = "func (c #{type}) Get#{child}(n #{child}) (s string) {\n"
       File.open(filename, 'a') {|f| f.write(s) }
       case parent
-        when :Binary, :Equality, :Join
+        when :Binary, :Equality, :Join, :InfixOperation
 #           s = '  ls, rs := c.GetBinary(n)
 #   s = fmt.Sprintf("%v * %v", ls, rs)
 #   return

@@ -40,6 +40,12 @@ type Visitor interface {
 	GetMin(n Min) string
 	GetAvg(n Avg) string
 
+	//-----------------InfixOperation----------------
+	GetMultiplication(n Multiplication) string
+	GetDivision(n Division) string
+	GetAddition(n Addition) string
+	GetSubtraction(n Subtraction) string
+
 	//-----------------Join----------------
 	GetInnerJoin(n InnerJoin) string
 	GetOuterJoin(n OuterJoin) string
