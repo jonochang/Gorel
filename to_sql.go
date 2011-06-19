@@ -545,7 +545,7 @@ func (c ToSql) GetNot(n Not) (s string) {
 }
 
 func (c ToSql) GetLock(n Lock) (s string) {
-	expr := ""
+	expr := "*"
 	if n.expression != nil {
 		n.expression.Visit(c)
 	}
@@ -575,7 +575,7 @@ func (c ToSql) GetLimit(n Limit) (s string) {
 }
 
 func (c ToSql) GetTop(n Top) (s string) {
-	expr := ""
+	expr := "*"
 	if n.expression != nil {
 		n.expression.Visit(c)
 	}
@@ -585,7 +585,7 @@ func (c ToSql) GetTop(n Top) (s string) {
 }
 
 func (c ToSql) GetHaving(n Having) (s string) {
-	expr := ""
+	expr := "*"
 	if n.expression != nil {
 		n.expression.Visit(c)
 	}
@@ -595,7 +595,7 @@ func (c ToSql) GetHaving(n Having) (s string) {
 }
 
 func (c ToSql) GetUnqualifiedColumn(n UnqualifiedColumn) (s string) {
-	expr := ""
+	expr := "*"
 	if n.expression != nil {
 		n.expression.Visit(c)
 	}
@@ -605,7 +605,7 @@ func (c ToSql) GetUnqualifiedColumn(n UnqualifiedColumn) (s string) {
 }
 
 func (c ToSql) GetGroup(n Group) (s string) {
-	expr := ""
+	expr := "*"
 	if n.expression != nil {
 		n.expression.Visit(c)
 	}
@@ -615,7 +615,7 @@ func (c ToSql) GetGroup(n Group) (s string) {
 }
 
 func (c ToSql) GetGrouping(n Grouping) (s string) {
-	expr := ""
+	expr := "*"
 	if n.expression != nil {
 		n.expression.Visit(c)
 	}
@@ -625,7 +625,7 @@ func (c ToSql) GetGrouping(n Grouping) (s string) {
 }
 
 func (c ToSql) GetOn(n On) (s string) {
-	expr := ""
+	expr := "*"
 	if n.expression != nil {
 		n.expression.Visit(c)
 	}
