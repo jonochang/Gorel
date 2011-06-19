@@ -431,15 +431,21 @@ func TestGetMultiplication(t *testing.T) {
 		t.Errorf("failed to get Multiplication ")
 	}
 }
+
 func TestGetDivision(t *testing.T) {
 	v := new(ToSql)
 	n := new(Division)
 
+	n.left = Literal{1}
+	n.right = Literal{2}
+
 	s := v.GetDivision(*n)
-	if s != "" {
+	if s != "1 / 2" {
+		t.Log(s)
 		t.Errorf("failed to get Division ")
 	}
 }
+
 func TestGetAddition(t *testing.T) {
 	v := new(ToSql)
 	n := new(Addition)

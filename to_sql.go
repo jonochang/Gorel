@@ -513,7 +513,7 @@ func (c ToSql) GetDivision(n Division) (s string) {
 		rs = n.right.Visit(c)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("%v / %v", ls, rs)
 	return
 }
 
