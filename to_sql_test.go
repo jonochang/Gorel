@@ -487,11 +487,15 @@ func TestGetLimit(t *testing.T) {
 	v := new(ToSql)
 	n := new(Limit)
 
+	n.expression = Literal{100}
+
 	s := v.GetLimit(*n)
-	if s != "" {
+	if s != "LIMIT 100" {
+		t.Log(s)
 		t.Errorf("failed to get Limit ")
 	}
 }
+
 func TestGetTop(t *testing.T) {
 	v := new(ToSql)
 	n := new(Top)
