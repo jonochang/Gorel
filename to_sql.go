@@ -5,10 +5,11 @@ import (
 	"strconv"
 	"strings"
 	"reflect"
+  "db"
 )
 
 type ToSql struct {
-
+  connection db.Connection
 }
 
 func (c ToSql) GetLiteral(n Literal) (s string) {
