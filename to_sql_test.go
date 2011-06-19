@@ -337,16 +337,12 @@ func TestGetEquality(t *testing.T) {
 	v := new(ToSql)
 	n := new(Equality)
 
-	ll := new(Literal)
-	ll.value = 1
-	n.left = ll
-
-	rl := new(Literal)
-	rl.value = 2
-	n.right = rl
+	n.left = Literal{1}
+	n.right = Literal{2}
 
 	s := v.GetEquality(*n)
 	if s != "1 = 2" {
+		t.Log(s)
 		t.Errorf("failed to get Equality")
 	}
 }
