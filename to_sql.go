@@ -535,70 +535,99 @@ func (c ToSql) GetStringJoin(n StringJoin) (s string) {
 
 //-----------------Unary----------------
 func (c ToSql) GetNot(n Not) (s string) {
-	expr := n.expression.Visit(c)
+	expr := ""
+	if n.expression != nil {
+		n.expression.Visit(c)
+	}
 	s = fmt.Sprintf("NOT (%v)", expr)
 	return s
 
 }
 
 func (c ToSql) GetLock(n Lock) (s string) {
-	expr := n.expression.Visit(c)
+	expr := ""
+	if n.expression != nil {
+		n.expression.Visit(c)
+	}
 	s = expr
 	return s
 
 }
 
 func (c ToSql) GetOffset(n Offset) (s string) {
-	expr := n.expression.Visit(c)
-	s = expr
+	expr := ""
+	if n.expression != nil {
+		n.expression.Visit(c)
+	}
 	return s
 
 }
 
 func (c ToSql) GetLimit(n Limit) (s string) {
-	expr := n.expression.Visit(c)
+	expr := ""
+	if n.expression != nil {
+		n.expression.Visit(c)
+	}
 	s = expr
 	return s
 
 }
 
 func (c ToSql) GetTop(n Top) (s string) {
-	expr := n.expression.Visit(c)
+	expr := ""
+	if n.expression != nil {
+		n.expression.Visit(c)
+	}
 	s = expr
 	return s
 
 }
 
 func (c ToSql) GetHaving(n Having) (s string) {
-	expr := n.expression.Visit(c)
+	expr := ""
+	if n.expression != nil {
+		n.expression.Visit(c)
+	}
 	s = expr
 	return s
 
 }
 
 func (c ToSql) GetUnqualifiedColumn(n UnqualifiedColumn) (s string) {
-	expr := n.expression.Visit(c)
+	expr := ""
+	if n.expression != nil {
+		n.expression.Visit(c)
+	}
 	s = expr
 	return s
 
 }
 
 func (c ToSql) GetGroup(n Group) (s string) {
-	expr := n.expression.Visit(c)
+	expr := ""
+	if n.expression != nil {
+		n.expression.Visit(c)
+	}
 	s = expr
 	return s
 
 }
 
 func (c ToSql) GetGrouping(n Grouping) (s string) {
-	expr := n.expression.Visit(c)
+	expr := ""
+	if n.expression != nil {
+		n.expression.Visit(c)
+	}
 	s = expr
 	return s
 
 }
 
 func (c ToSql) GetOn(n On) (s string) {
-	expr := n.expression.Visit(c)
+	expr := ""
+	if n.expression != nil {
+		n.expression.Visit(c)
+	}
 	s = expr
 	return s
 
