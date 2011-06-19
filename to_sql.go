@@ -615,11 +615,11 @@ func (c ToSql) GetGroup(n Group) (s string) {
 }
 
 func (c ToSql) GetGrouping(n Grouping) (s string) {
-	expr := "*"
+	expr := ""
 	if n.expression != nil {
-		n.expression.Visit(c)
+		expr = n.expression.Visit(c)
 	}
-	s = expr
+	s = fmt.Sprintf("(%v)", expr)
 	return s
 
 }

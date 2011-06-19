@@ -537,15 +537,21 @@ func TestGetGroup(t *testing.T) {
 		t.Errorf("failed to get Group ")
 	}
 }
+
 func TestGetGrouping(t *testing.T) {
 	v := new(ToSql)
 	n := new(Grouping)
-
+	eq1 := Equality{Binary{Literal{1}, Literal{2}}}
+	eq2 := Equality{Binary{Literal{3}, Literal{4}}}
+	and := And{[]Node{eq1, eq2}}
+	n.expression = and
 	s := v.GetGrouping(*n)
-	if s != "" {
+	if s != "(1 = 2 AND 3 = 4)" {
+		t.Log(s)
 		t.Errorf("failed to get Grouping ")
 	}
 }
+
 func TestGetOn(t *testing.T) {
 	v := new(ToSql)
 	n := new(On)
