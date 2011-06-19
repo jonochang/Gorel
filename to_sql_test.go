@@ -451,11 +451,15 @@ func TestGetNot(t *testing.T) {
 	v := new(ToSql)
 	n := new(Not)
 
+	n.expression = Equality{Binary{Literal{1}, Literal{2}}}
+
 	s := v.GetNot(*n)
-	if s != "" {
+	if s != "NOT (1 = 2)" {
+		t.Log(s)
 		t.Errorf("failed to get Not ")
 	}
 }
+
 func TestGetLock(t *testing.T) {
 	v := new(ToSql)
 	n := new(Lock)
