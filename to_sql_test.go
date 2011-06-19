@@ -505,15 +505,20 @@ func TestGetTop(t *testing.T) {
 		t.Errorf("failed to get Top ")
 	}
 }
+
 func TestGetHaving(t *testing.T) {
 	v := new(ToSql)
 	n := new(Having)
 
+	n.expression = Equality{Binary{Literal{1}, Literal{2}}}
+
 	s := v.GetHaving(*n)
-	if s != "" {
+	if s != "HAVING (1 = 2)" {
+		t.Log(s)
 		t.Errorf("failed to get Having ")
 	}
 }
+
 func TestGetUnqualifiedColumn(t *testing.T) {
 	v := new(ToSql)
 	n := new(UnqualifiedColumn)

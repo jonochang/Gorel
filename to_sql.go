@@ -585,11 +585,11 @@ func (c ToSql) GetTop(n Top) (s string) {
 }
 
 func (c ToSql) GetHaving(n Having) (s string) {
-	expr := "*"
+	expr := ""
 	if n.expression != nil {
-		n.expression.Visit(c)
+		expr = n.expression.Visit(c)
 	}
-	s = expr
+	s = fmt.Sprintf("HAVING (%v)", expr)
 	return s
 
 }
