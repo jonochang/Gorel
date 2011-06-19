@@ -2,6 +2,14 @@ package ast
 
 import (
 	"testing"
+  "db"
+)
+
+const (
+	DB_SOCK   = "/tmp/mysql.sock"
+	DB_USER   = "gorel_test"
+	DB_PASSWD = "abc123"
+	DB_NAME   = "gorel_test"
 )
 
 func TestGetLiteral(t *testing.T) {
@@ -651,10 +659,28 @@ func TestGetSelectCore(t *testing.T) {
 }
 
 func TestVisitGetTable(t *testing.T) {
-  t.Errorf("failed to get table ")
+	v := new(ToSql)
+	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+	table, _ := connection.GetTable("Users")
+  n := Table{table}
+  
+  s := v.GetTable(n)
+  if s != "`Users`" {
+    t.Log(s)
+    t.Errorf("failed to get table ")
+  }
 }
 
 func TestVisitGetTableAlias(t *testing.T) {
-  t.Errorf("failed to get table ")
+	v := new(ToSql)
+	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+	table, _ := connection.GetTable("Users")
+  n := Table{table}
+  n.Alias = "u" 
+  s := v.GetTable(n)
+  if s != "`Users` `u`" {
+    t.Log(s)
+    t.Errorf("failed to get table ")
+  }
 }
 
