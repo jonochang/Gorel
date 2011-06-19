@@ -6,13 +6,6 @@ import (
 	//"strconv"
 )
 
-const (
-	DB_SOCK   = "/tmp/mysql.sock"
-	DB_USER   = "gorel_test"
-	DB_PASSWD = "abc123"
-	DB_NAME   = "gorel_test"
-)
-
 func TestVisit(t *testing.T) {
 	binary := new(Equality)
 	l := new(Literal)
