@@ -556,8 +556,11 @@ func TestGetOn(t *testing.T) {
 	v := new(ToSql)
 	n := new(On)
 
+	n.expression = Equality{Binary{Literal{1}, Literal{2}}}
+
 	s := v.GetOn(*n)
-	if s != "" {
+	if s != "ON 1 = 2" {
+		t.Log(s)
 		t.Errorf("failed to get On ")
 	}
 }

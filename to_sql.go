@@ -625,11 +625,11 @@ func (c ToSql) GetGrouping(n Grouping) (s string) {
 }
 
 func (c ToSql) GetOn(n On) (s string) {
-	expr := "*"
+	expr := ""
 	if n.expression != nil {
-		n.expression.Visit(c)
+		expr = n.expression.Visit(c)
 	}
-	s = expr
+	s = fmt.Sprintf("ON %v", expr)
 	return s
 
 }
