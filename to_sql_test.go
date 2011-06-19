@@ -422,8 +422,12 @@ func TestGetMultiplication(t *testing.T) {
 	v := new(ToSql)
 	n := new(Multiplication)
 
+	n.left = Literal{1}
+	n.right = Literal{2}
+
 	s := v.GetMultiplication(*n)
-	if s != "" {
+	if s != "1 * 2" {
+		t.Log(s)
 		t.Errorf("failed to get Multiplication ")
 	}
 }
