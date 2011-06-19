@@ -450,11 +450,16 @@ func TestGetAddition(t *testing.T) {
 	v := new(ToSql)
 	n := new(Addition)
 
+	n.left = Literal{1}
+	n.right = Literal{2}
+
 	s := v.GetAddition(*n)
-	if s != "" {
+	if s != "1 + 2" {
+		t.Log(s)
 		t.Errorf("failed to get Addition ")
 	}
 }
+
 func TestGetSubtraction(t *testing.T) {
 	v := new(ToSql)
 	n := new(Subtraction)
