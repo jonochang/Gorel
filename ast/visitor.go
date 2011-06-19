@@ -62,4 +62,9 @@ type Visitor interface {
 	GetGroup(n Group) string
 	GetGrouping(n Grouping) string
 	GetOn(n On) string
+
+  //---- not generated ----
+  GetField(n Field) string
+  GetSelectCore(n SelectCore) string
+  GetTable(n Table) string
 }

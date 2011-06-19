@@ -2,32 +2,32 @@ package gorel
 
 import (
 	"testing"
-	"fmt"
+	//"fmt"
 	//"strconv"
 )
 
 func TestVisit(t *testing.T) {
-	binary := new(Equality)
-	l := new(Literal)
-	l.value = "leftb"
-	binary.left = l
-
-	r := new(Literal)
-	r.value = "rightb"
-	binary.right = r
-
-	p := new(Literal)
-	p.value = "p"
-	u := new(Not)
-	u.expression = p
-	join := new(InnerJoin)
-	join.left = binary
-	join.right = u
-
-	v := new(MySQL)
-	//v.Visit(*join)
-	s := join.Visit(v)
-	fmt.Println(s)
+	//	binary := new(Equality)
+	//	l := new(Literal)
+	//	l.value = "leftb"
+	//	binary.left = l
+	//
+	//	r := new(Literal)
+	//	r.value = "rightb"
+	//	binary.right = r
+	//
+	//	p := new(Literal)
+	//	p.value = "p"
+	//	u := new(Not)
+	//	u.expression = p
+	//	join := new(InnerJoin)
+	//	join.left = binary
+	//	join.right = u
+	//
+	//	v := new(MySQL)
+	//	//v.Visit(*join)
+	//	s := join.Visit(v)
+	//	fmt.Println(s)
 }
 
 func TestVisitNodes(t *testing.T) {

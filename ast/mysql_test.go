@@ -1,4 +1,4 @@
-package gorel
+package ast
 
 import (
 	"testing"
@@ -9,7 +9,7 @@ func TestMySQL_GetLiteral(t *testing.T) {
 	l := new(Literal)
 
 	t.Log("Test string")
-	l.value = "te\"st"
+	l.Value = "te\"st"
 	s := v.GetLiteral(*l)
 	if s != "\"te\\\"st\"" {
 		t.Log(s)

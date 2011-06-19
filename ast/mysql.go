@@ -1,4 +1,4 @@
-package gorel
+package ast
 
 import (
 	"strconv"
@@ -10,7 +10,7 @@ type MySQL struct {
 }
 
 func (c MySQL) GetLiteral(n Literal) (s string) {
-	switch val := n.value.(type) {
+	switch val := n.Value.(type) {
 	case string:
 		//s = fmt.Sprintf("'%v'", val)
 		//TODO: use custom MySQL Quoting or Binary Protocol

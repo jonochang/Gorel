@@ -5,7 +5,7 @@ type Node interface {
 }
 
 type Literal struct {
-	value interface{}
+	Value interface{}
 }
 
 func (n Literal) Visit(v Visitor) (s string) {
@@ -14,7 +14,7 @@ func (n Literal) Visit(v Visitor) (s string) {
 }
 
 type And struct {
-	children []Node
+	Children []Node
 }
 
 func (n And) Visit(v Visitor) (s string) {
@@ -23,8 +23,8 @@ func (n And) Visit(v Visitor) (s string) {
 }
 
 type Binary struct {
-	left  Node
-	right Node
+	Left  Node
+	Right Node
 }
 
 type Equality struct{ Binary }
@@ -35,9 +35,9 @@ func (n Equality) Visit(v Visitor) (s string) {
 }
 
 type Function struct {
-	expressions []Node
-	alias       Literal
-	distinct    bool
+	Expressions []Node
+	Alias       Literal
+	Distinct    bool
 }
 
 type InfixOperation struct{ Binary }
@@ -45,7 +45,7 @@ type InfixOperation struct{ Binary }
 type Join struct{ Binary }
 
 type Unary struct {
-	expression Node
+	Expression Node
 }
 
 //-----------------And----------------

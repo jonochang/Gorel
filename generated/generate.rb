@@ -37,20 +37,20 @@ end
 @parent_list = {
   :Binary => "
 type Binary struct {
-  left Node
-  right Node
+  Left Node
+  Right Node
 }
 ",
   :Unary => "
 type Unary struct {
-  expression Node
+  Expression Node
 }
 ",
   :Function => "
 type Function struct {
-  expressions []Node
-  alias Literal
-  distinct bool
+  Expressions []Node
+  Alias Literal
+  Distinct bool
 }
 ",
   :Join => "
@@ -58,7 +58,7 @@ type Join struct {Binary}
 ",
   :And => "
 type And struct {
-  children []Node
+  Children []Node
 }
 
 func (n And) Visit(v Visitor) (s string) {
@@ -87,7 +87,7 @@ type Node interface {
 }
 
 type Literal struct {
-  value interface{}
+  Value interface{}
 }
 
 func (n Literal) Visit(v Visitor) (s string) {
@@ -212,8 +212,8 @@ func (b #{type}) VisitNodesString(nodes []Node, sep string) (s string) {
 #         File.open(filename, 'a') {|f| f.write(s) }
     when :Equality
       s = "func (c #{type}) GetEquality(n Equality) (s string) {
-  ls := n.left.Visit(c)
-  rs := n.right.Visit(c)
+  ls := n.Left.Visit(c)
+  rs := n.Right.Visit(c)
   s = fmt.Sprintf(\"%v = %v\", ls, rs)
   return
 }\n
@@ -240,13 +240,13 @@ func (b #{type}) VisitNodesString(nodes []Node, sep string) (s string) {
 #   return
 # '
           s = "  ls := \"\"
-  if n.left != nil {
-    ls = n.left.Visit(c)
+  if n.Left != nil {
+    ls = n.Left.Visit(c)
   }
   
   rs := \"\"
-  if n.right != nil {
-    rs = n.right.Visit(c)
+  if n.Right != nil {
+    rs = n.Right.Visit(c)
   }
   
   s = fmt.Sprintf(\"%v * %v\", ls, rs)
@@ -255,15 +255,15 @@ func (b #{type}) VisitNodesString(nodes []Node, sep string) (s string) {
           File.open(filename, 'a') {|f| f.write(s) }
           
         when :Unary
-          s = "  expr := n.expression.Visit(c)
+          s = "  expr := n.Expression.Visit(c)
   s = expr
   return s\n\n"
           File.open(filename, 'a') {|f| f.write(s) }
 
         when :Function
-          s = "  expressions := c.VisitNodesString(n.expressions, \", \")
-  alias := n.alias.Visit(c)
-  distinct := n.distinct
+          s = "  expressions := c.VisitNodesString(n.Expressions, \", \")
+  alias := n.Alias.Visit(c)
+  distinct := n.Distinct
   s = fmt.Sprintf(\"%v * %v * %v\", expressions, alias, distinct)
   return s\n\n"
           File.open(filename, 'a') {|f| f.write(s) }
@@ -287,28 +287,28 @@ def generate_visitor_test filename, type
     l := new(Literal)
           
     t.Log(\"Test string\")
-    l.value = \"test\"
+    l.Value = \"test\"
     s := v.GetLiteral(*l)
     if s != \"test\" {
       t.Errorf(\"failed test string\")
     }
     
     t.Log(\"Test boolean\")
-    l.value = false
+    l.Value = false
     s = v.GetLiteral(*l)
     if s != \"false\" {
       t.Errorf(\"failed test boolean\")
     }
     
     t.Log(\"Test int\")
-    l.value = 123
+    l.Value = 123
     s = v.GetLiteral(*l)
     if s != \"123\" {
       t.Errorf(\"failed test int\")
     }
     
     t.Log(\"Test float\")
-    l.value = 123.3
+    l.Value = 123.3
     s = v.GetLiteral(*l)
     if s != \"123.3\" {
       t.Errorf(\"failed test float\")
@@ -349,12 +349,12 @@ def generate_visitor_test filename, type
     n := new(Equality)
     
     ll := new(Literal)
-    ll.value = 1
-    n.left = ll
+    ll.Value = 1
+    n.Left = ll
     
     rl := new(Literal)
-    rl.value = 2
-    n.right = rl
+    rl.Value = 2
+    n.Right = rl
     
     s := v.GetEquality(*n)
     if s != \"1 = 2\" {

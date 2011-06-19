@@ -1,4 +1,4 @@
-package gorel
+package ast
 
 import (
 	"testing"
@@ -9,35 +9,35 @@ func TestGetLiteral(t *testing.T) {
 	l := new(Literal)
 
 	t.Log("Test string")
-	l.value = "test"
+	l.Value = "test"
 	s := v.GetLiteral(*l)
 	if s != "\"test\"" {
 		t.Errorf("failed test string")
 	}
 
 	t.Log("Test boolean")
-	l.value = false
+	l.Value = false
 	s = v.GetLiteral(*l)
 	if s != "false" {
 		t.Errorf("failed test boolean")
 	}
 
 	t.Log("Test int")
-	l.value = 123
+	l.Value = 123
 	s = v.GetLiteral(*l)
 	if s != "123" {
 		t.Errorf("failed test int")
 	}
 
 	t.Log("Test float")
-	l.value = 123.3
+	l.Value = 123.3
 	s = v.GetLiteral(*l)
 	if s != "123.3" {
 		t.Errorf("failed test float")
 	}
 
 	t.Log("Test Array of ints")
-	l.value = []int{1, 2, 3, 4}
+	l.Value = []int{1, 2, 3, 4}
 	s = v.GetLiteral(*l)
 	if s != "1,2,3,4" {
 		t.Log(s)
@@ -45,7 +45,7 @@ func TestGetLiteral(t *testing.T) {
 	}
 
 	t.Log("Test Array of ints")
-	l.value = []int{1, 2, 3, 4}
+	l.Value = []int{1, 2, 3, 4}
 	s = v.GetLiteral(*l)
 	if s != "1,2,3,4" {
 		t.Log(s)
@@ -53,7 +53,7 @@ func TestGetLiteral(t *testing.T) {
 	}
 
 	t.Log("Test Array of strings")
-	l.value = []string{"a", "bc", "d", "ef1"}
+	l.Value = []string{"a", "bc", "d", "ef1"}
 	s = v.GetLiteral(*l)
 	if s != "\"a\",\"bc\",\"d\",\"ef1\"" {
 		t.Log(s)
@@ -84,7 +84,7 @@ func TestGetAnd(t *testing.T) {
 	n1 := Literal{1}
 	n2 := Literal{2}
 	n3 := Literal{3}
-	n.children = []Node{n1, n2, n3}
+	n.Children = []Node{n1, n2, n3}
 
 	s := v.GetAnd(*n)
 	if s != "1 AND 2 AND 3" {
@@ -97,8 +97,8 @@ func TestGetAnd(t *testing.T) {
 func TestGetBetween(t *testing.T) {
 	v := new(ToSql)
 	n := new(Between)
-	n.left = Literal{1}
-	n.right = And{[]Node{
+	n.Left = Literal{1}
+	n.Right = And{[]Node{
 		Literal{0},
 		Literal{3}}}
 
@@ -112,7 +112,7 @@ func TestGetBetween(t *testing.T) {
 func TestGetNotEqual(t *testing.T) {
 	v := new(ToSql)
 	n := new(NotEqual)
-	n.left = Literal{1}
+	n.Left = Literal{1}
 
 	s := v.GetNotEqual(*n)
 	if s != "1 IS NOT NULL" {
@@ -120,7 +120,7 @@ func TestGetNotEqual(t *testing.T) {
 		t.Errorf("failed to get NotEqual null right")
 	}
 
-	n.right = Literal{2}
+	n.Right = Literal{2}
 	s = v.GetNotEqual(*n)
 	if s != "1 != 2" {
 		t.Log(s)
@@ -142,8 +142,8 @@ func TestGetOr(t *testing.T) {
 	v := new(ToSql)
 	n := new(Or)
 
-	n.left = Literal{1}
-	n.right = Literal{2}
+	n.Left = Literal{1}
+	n.Right = Literal{2}
 
 	s := v.GetOr(*n)
 	if s != "1 OR 2" {
@@ -166,8 +166,8 @@ func TestGetGreaterThan(t *testing.T) {
 	v := new(ToSql)
 	n := new(GreaterThan)
 
-	n.left = Literal{1}
-	n.right = Literal{2}
+	n.Left = Literal{1}
+	n.Right = Literal{2}
 
 	s := v.GetGreaterThan(*n)
 	if s != "1 > 2" {
@@ -180,8 +180,8 @@ func TestGetGreaterThanOrEqual(t *testing.T) {
 	v := new(ToSql)
 	n := new(GreaterThanOrEqual)
 
-	n.left = Literal{2}
-	n.right = Literal{1}
+	n.Left = Literal{2}
+	n.Right = Literal{1}
 
 	s := v.GetGreaterThanOrEqual(*n)
 	if s != "2 >= 1" {
@@ -194,8 +194,8 @@ func TestGetLessThan(t *testing.T) {
 	v := new(ToSql)
 	n := new(LessThan)
 
-	n.left = Literal{1}
-	n.right = Literal{2}
+	n.Left = Literal{1}
+	n.Right = Literal{2}
 
 	s := v.GetLessThan(*n)
 	if s != "1 < 2" {
@@ -208,8 +208,8 @@ func TestGetLessThanOrEqual(t *testing.T) {
 	v := new(ToSql)
 	n := new(LessThanOrEqual)
 
-	n.left = Literal{2}
-	n.right = Literal{1}
+	n.Left = Literal{2}
+	n.Right = Literal{1}
 
 	s := v.GetLessThanOrEqual(*n)
 	if s != "2 <= 1" {
@@ -222,8 +222,8 @@ func TestGetMatches(t *testing.T) {
 	v := new(ToSql)
 	n := new(Matches)
 
-	n.left = Literal{2}
-	n.right = Literal{1}
+	n.Left = Literal{2}
+	n.Right = Literal{1}
 
 	s := v.GetMatches(*n)
 	if s != "2 LIKE 1" {
@@ -236,8 +236,8 @@ func TestGetDoesNotMatch(t *testing.T) {
 	v := new(ToSql)
 	n := new(DoesNotMatch)
 
-	n.left = Literal{2}
-	n.right = Literal{1}
+	n.Left = Literal{2}
+	n.Right = Literal{1}
 
 	s := v.GetDoesNotMatch(*n)
 	if s != "2 NOT LIKE 1" {
@@ -250,8 +250,8 @@ func TestGetNotIn(t *testing.T) {
 	v := new(ToSql)
 	n := new(NotIn)
 
-	n.left = Literal{"abc"}
-	n.right = Literal{[]string{"1", "2", "3", "4"}}
+	n.Left = Literal{"abc"}
+	n.Right = Literal{[]string{"1", "2", "3", "4"}}
 	s := v.GetNotIn(*n)
 	if s != "\"abc\" NOT IN (\"1\",\"2\",\"3\",\"4\")" {
 		t.Log(s)
@@ -337,8 +337,8 @@ func TestGetEquality(t *testing.T) {
 	v := new(ToSql)
 	n := new(Equality)
 
-	n.left = Literal{1}
-	n.right = Literal{2}
+	n.Left = Literal{1}
+	n.Right = Literal{2}
 
 	s := v.GetEquality(*n)
 	if s != "1 = 2" {
@@ -351,8 +351,8 @@ func TestGetIn(t *testing.T) {
 	v := new(ToSql)
 	n := new(In)
 
-	n.left = Literal{"abc"}
-	n.right = Literal{[]string{"1", "2", "3", "4"}}
+	n.Left = Literal{"abc"}
+	n.Right = Literal{[]string{"1", "2", "3", "4"}}
 
 	s := v.GetIn(*n)
 	if s != "\"abc\" IN (\"1\",\"2\",\"3\",\"4\")" {
@@ -422,8 +422,8 @@ func TestGetMultiplication(t *testing.T) {
 	v := new(ToSql)
 	n := new(Multiplication)
 
-	n.left = Literal{1}
-	n.right = Literal{2}
+	n.Left = Literal{1}
+	n.Right = Literal{2}
 
 	s := v.GetMultiplication(*n)
 	if s != "1 * 2" {
@@ -436,8 +436,8 @@ func TestGetDivision(t *testing.T) {
 	v := new(ToSql)
 	n := new(Division)
 
-	n.left = Literal{1}
-	n.right = Literal{2}
+	n.Left = Literal{1}
+	n.Right = Literal{2}
 
 	s := v.GetDivision(*n)
 	if s != "1 / 2" {
@@ -450,8 +450,8 @@ func TestGetAddition(t *testing.T) {
 	v := new(ToSql)
 	n := new(Addition)
 
-	n.left = Literal{1}
-	n.right = Literal{2}
+	n.Left = Literal{1}
+	n.Right = Literal{2}
 
 	s := v.GetAddition(*n)
 	if s != "1 + 2" {
@@ -464,8 +464,8 @@ func TestGetSubtraction(t *testing.T) {
 	v := new(ToSql)
 	n := new(Subtraction)
 
-	n.left = Literal{1}
-	n.right = Literal{2}
+	n.Left = Literal{1}
+	n.Right = Literal{2}
 
 	s := v.GetSubtraction(*n)
 	if s != "1 - 2" {
@@ -508,7 +508,7 @@ func TestGetNot(t *testing.T) {
 	v := new(ToSql)
 	n := new(Not)
 
-	n.expression = Equality{Binary{Literal{1}, Literal{2}}}
+	n.Expression = Equality{Binary{Literal{1}, Literal{2}}}
 
 	s := v.GetNot(*n)
 	if s != "NOT (1 = 2)" {
@@ -531,7 +531,7 @@ func TestGetOffset(t *testing.T) {
 	v := new(ToSql)
 	n := new(Offset)
 
-	n.expression = Literal{10}
+	n.Expression = Literal{10}
 
 	s := v.GetOffset(*n)
 	if s != "OFFSET 10" {
@@ -544,7 +544,7 @@ func TestGetLimit(t *testing.T) {
 	v := new(ToSql)
 	n := new(Limit)
 
-	n.expression = Literal{100}
+	n.Expression = Literal{100}
 
 	s := v.GetLimit(*n)
 	if s != "LIMIT 100" {
@@ -567,7 +567,7 @@ func TestGetHaving(t *testing.T) {
 	v := new(ToSql)
 	n := new(Having)
 
-	n.expression = Equality{Binary{Literal{1}, Literal{2}}}
+	n.Expression = Equality{Binary{Literal{1}, Literal{2}}}
 
 	s := v.GetHaving(*n)
 	if s != "HAVING (1 = 2)" {
@@ -601,7 +601,7 @@ func TestGetGrouping(t *testing.T) {
 	eq1 := Equality{Binary{Literal{1}, Literal{2}}}
 	eq2 := Equality{Binary{Literal{3}, Literal{4}}}
 	and := And{[]Node{eq1, eq2}}
-	n.expression = and
+	n.Expression = and
 	s := v.GetGrouping(*n)
 	if s != "(1 = 2 AND 3 = 4)" {
 		t.Log(s)
@@ -613,7 +613,7 @@ func TestGetOn(t *testing.T) {
 	v := new(ToSql)
 	n := new(On)
 
-	n.expression = Equality{Binary{Literal{1}, Literal{2}}}
+	n.Expression = Equality{Binary{Literal{1}, Literal{2}}}
 
 	s := v.GetOn(*n)
 	if s != "ON 1 = 2" {
@@ -621,3 +621,40 @@ func TestGetOn(t *testing.T) {
 		t.Errorf("failed to get On ")
 	}
 }
+
+// ----- not generated ----
+
+func TestGetField(t *testing.T) {
+	v := new(ToSql)
+  n := Field{"`User`.`id`"}
+  s := v.GetField(n)
+  if s != "`User`.`id`" {
+		t.Log(s)
+		t.Errorf("failed to get On ")
+  }
+}
+
+func TestGetSelectCore(t *testing.T) {
+	v := new(ToSql)
+  n := new(SelectCore)
+
+  f := Field{"`User`.`id`"}
+
+  n.Wheres = []Node{f.Eq(Literal{1})}
+
+  s := v.GetSelectCore(*n)
+  if s != "`User`.`id`" {
+		t.Log(s)
+		t.Errorf("failed to get On ")
+  }
+
+}
+
+func TestVisitGetTable(t *testing.T) {
+  t.Errorf("failed to get table ")
+}
+
+func TestVisitGetTableAlias(t *testing.T) {
+  t.Errorf("failed to get table ")
+}
+
