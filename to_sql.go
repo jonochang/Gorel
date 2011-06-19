@@ -537,7 +537,7 @@ func (c ToSql) GetStringJoin(n StringJoin) (s string) {
 func (c ToSql) GetNot(n Not) (s string) {
 	expr := ""
 	if n.expression != nil {
-		n.expression.Visit(c)
+		expr = n.expression.Visit(c)
 	}
 	s = fmt.Sprintf("NOT (%v)", expr)
 	return s
