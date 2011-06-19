@@ -543,7 +543,7 @@ func (c ToSql) GetSubtraction(n Subtraction) (s string) {
 		rs = n.right.Visit(c)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("%v - %v", ls, rs)
 	return
 }
 
