@@ -1,7 +1,12 @@
 package ast
 
+import (
+	"db"
+)
+
 type Field struct {
-	Name string
+	Table  Table
+	Column db.ColumnSchema
 }
 
 func (n Field) Visit(v Visitor) (s string) {

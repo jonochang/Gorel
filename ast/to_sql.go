@@ -698,14 +698,38 @@ func (c ToSql) GetOn(n On) (s string) {
 }
 
 func (c ToSql) GetField(n Field) (s string) {
-	s = n.Name
+	quoted_column_name := n.Table.Connection.QuoteColumnName(n.Column.Name)
+	quoted_table_name := n.Table.Connection.QuoteTableName(n.Table.Name)
+	if n.Table.Alias != "" {
+		quoted_table_name = n.Table.Connection.QuoteTableName(n.Table.Alias)
+	}
+
+	s = fmt.Sprintf("%v.%v", quoted_table_name, quoted_column_name)
 	return
 }
 
 func (c ToSql) GetSelectCore(n SelectCore) (s string) {
-	wheres := c.VisitNodes(n.Wheres)
-	where_string := strings.Join(wheres, " AND ")
-	s = where_string
+	results := make([]string, 0)
+	results = append(results, "SELECT")
+
+	if len(n.Projections) > 0 {
+		projections := c.VisitNodes(n.Projections)
+		projections_string := strings.Join(projections, ", ")
+		results = append(results, projections_string)
+	}
+
+	if n.Source != nil {
+		source := n.Source.Visit(c)
+		results = append(results, source)
+	}
+
+	if len(n.Wheres) > 0 {
+		wheres := c.VisitNodes(n.Wheres)
+		where_string := strings.Join(wheres, " AND ")
+		results = append(results, "WHERE "+where_string)
+	}
+
+	s = strings.Join(results, " ")
 	return
 }
 

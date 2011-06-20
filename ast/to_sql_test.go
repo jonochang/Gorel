@@ -634,11 +634,16 @@ func TestGetOn(t *testing.T) {
 
 func TestGetField(t *testing.T) {
 	v := new(ToSql)
-	n := Field{"`User`.`id`"}
+	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+	tableSchema, _ := connection.GetTable("Users")
+	table := Table{tableSchema}
+
+	n := Field{table, table.ColumnMap["id"]}
+
 	s := v.GetField(n)
-	if s != "`User`.`id`" {
+	if s != "`Users`.`id`" {
 		t.Log(s)
-		t.Errorf("failed to get On ")
+		t.Errorf("failed to get Field ")
 	}
 }
 
@@ -646,12 +651,18 @@ func TestGetSelectCore(t *testing.T) {
 	v := new(ToSql)
 	n := new(SelectCore)
 
-	f := Field{"`User`.`id`"}
+	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+	tableSchema, _ := connection.GetTable("Users")
+	table := Table{tableSchema}
+	table.Alias = "u"
+	f := Field{table, table.ColumnMap["id"]}
 
+	n.Projections = []Node{SqlLiteral{"*"}}
+	n.Source = JoinSource{table, make([]Node, 0)}
 	n.Wheres = []Node{f.Eq(Literal{1})}
 
 	s := v.GetSelectCore(*n)
-	if s != "`User`.`id`" {
+	if s != "SELECT * FROM `Users` `u` WHERE `u`.`id` = 1" {
 		t.Log(s)
 		t.Errorf("failed to get On ")
 	}
