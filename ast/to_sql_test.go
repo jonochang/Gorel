@@ -2,7 +2,7 @@ package ast
 
 import (
 	"testing"
-  "db"
+	"db"
 )
 
 const (
@@ -634,27 +634,27 @@ func TestGetOn(t *testing.T) {
 
 func TestGetField(t *testing.T) {
 	v := new(ToSql)
-  n := Field{"`User`.`id`"}
-  s := v.GetField(n)
-  if s != "`User`.`id`" {
+	n := Field{"`User`.`id`"}
+	s := v.GetField(n)
+	if s != "`User`.`id`" {
 		t.Log(s)
 		t.Errorf("failed to get On ")
-  }
+	}
 }
 
 func TestGetSelectCore(t *testing.T) {
 	v := new(ToSql)
-  n := new(SelectCore)
+	n := new(SelectCore)
 
-  f := Field{"`User`.`id`"}
+	f := Field{"`User`.`id`"}
 
-  n.Wheres = []Node{f.Eq(Literal{1})}
+	n.Wheres = []Node{f.Eq(Literal{1})}
 
-  s := v.GetSelectCore(*n)
-  if s != "`User`.`id`" {
+	s := v.GetSelectCore(*n)
+	if s != "`User`.`id`" {
 		t.Log(s)
 		t.Errorf("failed to get On ")
-  }
+	}
 
 }
 
@@ -662,40 +662,40 @@ func TestVisitGetTable(t *testing.T) {
 	v := new(ToSql)
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	table, _ := connection.GetTable("Users")
-  n := Table{table}
-  
-  s := v.GetTable(n)
-  if s != "`Users`" {
-    t.Log(s)
-    t.Errorf("failed to get table ")
-  }
+	n := Table{table}
+
+	s := v.GetTable(n)
+	if s != "`Users`" {
+		t.Log(s)
+		t.Errorf("failed to get table ")
+	}
 }
 
 func TestVisitGetTableAlias(t *testing.T) {
 	v := new(ToSql)
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	table, _ := connection.GetTable("Users")
-  n := Table{table}
-  n.Alias = "u" 
-  s := v.GetTable(n)
-  if s != "`Users` `u`" {
-    t.Log(s)
-    t.Errorf("failed to get table ")
-  }
+	n := Table{table}
+	n.Alias = "u"
+	s := v.GetTable(n)
+	if s != "`Users` `u`" {
+		t.Log(s)
+		t.Errorf("failed to get table ")
+	}
 }
 
 func TestVisitGetJoinSource(t *testing.T) {
 	v := new(ToSql)
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
-  table := Table{tableSchema}
-  table.Alias = "u" 
-  
-  n := JoinSource{table, make([]Node, 0)}
-  s := v.GetJoinSource(n)
-  if s != "FROM `Users` `u` " {
-    t.Log(s)
-    t.Errorf("failed to get join source ")
-  }
+	table := Table{tableSchema}
+	table.Alias = "u"
+
+	n := JoinSource{table, make([]Node, 0)}
+	s := v.GetJoinSource(n)
+	if s != "FROM `Users` `u` " {
+		t.Log(s)
+		t.Errorf("failed to get join source ")
+	}
 
 }

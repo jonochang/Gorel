@@ -5,7 +5,6 @@ type Field struct {
 }
 
 func (n Field) Visit(v Visitor) (s string) {
-  s = v.GetField(n)
-  return
+	s = v.GetField(n)
+	return
 }
-

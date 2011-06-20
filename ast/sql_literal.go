@@ -1,10 +1,10 @@
 package ast
 
 type SqlLiteral struct {
-  string
+	string
 }
 
 func (n SqlLiteral) Visit(v Visitor) (s string) {
-  s = v.GetSqlLiteral(n)
-  return
+	s = v.GetSqlLiteral(n)
+	return
 }

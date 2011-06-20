@@ -8,7 +8,7 @@ import (
 )
 
 type Table struct {
-  ast.Table
+	ast.Table
 }
 
 func (t Table) Field(name string) (f ast.Field) {

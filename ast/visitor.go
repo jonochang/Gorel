@@ -63,10 +63,10 @@ type Visitor interface {
 	GetGrouping(n Grouping) string
 	GetOn(n On) string
 
-  //---- not generated ----
-  GetField(n Field) string
-  GetSelectCore(n SelectCore) string
-  GetTable(n Table) string
-  GetJoinSource(n JoinSource) string
-  GetSqlLiteral(n SqlLiteral) string
+	//---- not generated ----
+	GetField(n Field) string
+	GetSelectCore(n SelectCore) string
+	GetTable(n Table) string
+	GetJoinSource(n JoinSource) string
+	GetSqlLiteral(n SqlLiteral) string
 }

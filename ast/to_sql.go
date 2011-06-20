@@ -698,42 +698,42 @@ func (c ToSql) GetOn(n On) (s string) {
 }
 
 func (c ToSql) GetField(n Field) (s string) {
-  s = n.Name
-  return
+	s = n.Name
+	return
 }
 
 func (c ToSql) GetSelectCore(n SelectCore) (s string) {
-  wheres := c.VisitNodes(n.Wheres)
-  where_string := strings.Join(wheres, " AND ")
-  s = where_string
-  return
+	wheres := c.VisitNodes(n.Wheres)
+	where_string := strings.Join(wheres, " AND ")
+	s = where_string
+	return
 }
 
 func (c ToSql) GetTable(n Table) (s string) {
 	quoted_table_name := n.Connection.QuoteTableName(n.Name)
-  if n.Alias == "" {
-    s = quoted_table_name
-  } else {
-    quoted_table_alias := n.Connection.QuoteTableName(n.Alias)
-    s = fmt.Sprintf("%v %v", quoted_table_name, quoted_table_alias)
-  }
-  return
+	if n.Alias == "" {
+		s = quoted_table_name
+	} else {
+		quoted_table_alias := n.Connection.QuoteTableName(n.Alias)
+		s = fmt.Sprintf("%v %v", quoted_table_name, quoted_table_alias)
+	}
+	return
 }
 
 func (c ToSql) GetJoinSource(n JoinSource) (s string) {
-  if n.Source == nil || 
-     n.JoinOn == nil {
-    return ""
-  }
+	if n.Source == nil ||
+		n.JoinOn == nil {
+		return ""
+	}
 
-  source := n.Source.Visit(c)
-  joins := c.VisitNodes(n.JoinOn)
-  joins_string := strings.Join(joins, " ")
-  s = fmt.Sprintf("FROM %v %v", source, joins_string)
-  return
+	source := n.Source.Visit(c)
+	joins := c.VisitNodes(n.JoinOn)
+	joins_string := strings.Join(joins, " ")
+	s = fmt.Sprintf("FROM %v %v", source, joins_string)
+	return
 }
 
 func (c ToSql) GetSqlLiteral(n SqlLiteral) (s string) {
-  s = n.string
-  return
+	s = n.string
+	return
 }

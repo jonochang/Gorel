@@ -1,15 +1,14 @@
 package ast
 
 import (
-  "db"
+	"db"
 )
 
 type Table struct {
-  db.TableSchema
+	db.TableSchema
 }
 
 func (n Table) Visit(v Visitor) (s string) {
-  s = v.GetTable(n)
-  return
+	s = v.GetTable(n)
+	return
 }
-
