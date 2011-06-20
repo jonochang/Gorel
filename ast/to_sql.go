@@ -762,3 +762,46 @@ func (c ToSql) GetSqlLiteral(n SqlLiteral) (s string) {
 	s = n.string
 	return
 }
+
+func (c ToSql) GetSelectStatement(n SelectStatement) (s string) {
+	results := make([]string, 0)
+
+	if n.With != nil {
+		with := n.With.Visit(c)
+		results = append(results, with)
+	}
+
+	if len(n.Cores) > 0 {
+		cores := c.VisitNodes(n.Cores)
+		cores_string := strings.Join(cores, " ")
+		results = append(results, cores_string)
+	}
+
+	if len(n.Orders) > 0 {
+		orders := c.VisitNodes(n.Orders)
+		orders_string := strings.Join(orders, ", ")
+		results = append(results, "ORDER BY "+orders_string)
+	}
+
+	if n.Limit != nil {
+		limit := n.Limit.Visit(c)
+		results = append(results, limit)
+	}
+
+	if n.Offset != nil {
+		offset := n.Offset.Visit(c)
+		results = append(results, offset)
+	}
+
+	if n.Lock != nil {
+		lock := n.Lock.Visit(c)
+		results = append(results, lock)
+	}
+
+	s = strings.Join(results, " ")
+	return
+}
+
+func (c ToSql) GetWith(n With) (s string) {
+	return
+}

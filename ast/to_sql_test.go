@@ -712,5 +712,53 @@ func TestVisitGetJoinSource(t *testing.T) {
 		t.Log(s)
 		t.Errorf("failed to get join source ")
 	}
+}
 
+func TestVisitGetSqlLiteral(t *testing.T) {
+	v := new(ToSql)
+	n := SqlLiteral{"test"}
+	s := v.GetSqlLiteral(n)
+	if s != "test" {
+		t.Log(s)
+		t.Errorf("failed to get select statement ")
+	}
+}
+
+func TestVisitGetSelectStatement(t *testing.T) {
+	v := new(ToSql)
+	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+	tableSchema, _ := connection.GetTable("Users")
+	table := Table{tableSchema}
+	table.Alias = "u"
+	f := Field{table, table.ColumnMap["id"]}
+
+	n := NewSelectStatement()
+	if len(n.Cores) == 0 {
+		t.Errorf("Expected a core in new select statement")
+	}
+
+	c := n.Cores[len(n.Cores)-1].(SelectCore)
+	c.Projections = []Node{SqlLiteral{"*"}}
+	c.Source = JoinSource{table, make([]Node, 0)}
+	c.Wheres = []Node{f.Eq(Literal{1})}
+
+	n.Cores[len(n.Cores)-1] = c
+	n.Orders = append(n.Orders, f)
+	n.Limit = Limit{Unary{Literal{1}}}
+	n.Offset = Offset{Unary{Literal{1}}}
+	s := v.GetSelectStatement(n)
+	if s != "FROM `Users` `u` " {
+		t.Log(s)
+		t.Errorf("failed to get select statement ")
+	}
+}
+
+func TestVisitGetWith(t *testing.T) {
+	v := new(ToSql)
+	n := new(With)
+	s := v.GetWith(*n)
+	if s != "FROM `Users` `u` " {
+		t.Log(s)
+		t.Errorf("failed to get with")
+	}
 }
