@@ -339,10 +339,11 @@ func (c ToSql) GetTableAlias(n TableAlias) (s string) {
 
 	rs := ""
 	if n.Right != nil {
-		rs = n.Right.Visit(c)
+		source := n.Right.Visit(c)
+		rs = n.Left.(Table).Connection.QuoteTableName(source)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("%v %v", ls, rs)
 	return
 }
 

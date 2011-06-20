@@ -296,10 +296,14 @@ func TestGetDeleteStatement(t *testing.T) {
 }
 func TestGetTableAlias(t *testing.T) {
 	v := new(ToSql)
-	n := new(TableAlias)
+	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+	tableSchema, _ := connection.GetTable("Users")
+	table := Table{tableSchema}
+	n := TableAlias{Binary{table, SqlLiteral{"u"}}}
 
-	s := v.GetTableAlias(*n)
-	if s != "" {
+	s := v.GetTableAlias(n)
+	if s != "`Users` `u`" {
+		t.Log(s)
 		t.Errorf("failed to get TableAlias ")
 	}
 }
@@ -664,7 +668,7 @@ func TestGetSelectCore(t *testing.T) {
 	s := v.GetSelectCore(*n)
 	if s != "SELECT * FROM `Users` `u` WHERE `u`.`id` = 1" {
 		t.Log(s)
-		t.Errorf("failed to get On ")
+		t.Errorf("failed to get Select Core ")
 	}
 
 }
