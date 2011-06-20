@@ -67,4 +67,6 @@ type Visitor interface {
   GetField(n Field) string
   GetSelectCore(n SelectCore) string
   GetTable(n Table) string
+  GetJoinSource(n JoinSource) string
+  GetSqlLiteral(n SqlLiteral) string
 }

@@ -719,3 +719,21 @@ func (c ToSql) GetTable(n Table) (s string) {
   }
   return
 }
+
+func (c ToSql) GetJoinSource(n JoinSource) (s string) {
+  if n.Source == nil || 
+     n.JoinOn == nil {
+    return ""
+  }
+
+  source := n.Source.Visit(c)
+  joins := c.VisitNodes(n.JoinOn)
+  joins_string := strings.Join(joins, " ")
+  s = fmt.Sprintf("FROM %v %v", source, joins_string)
+  return
+}
+
+func (c ToSql) GetSqlLiteral(n SqlLiteral) (s string) {
+  s = n.string
+  return
+}
