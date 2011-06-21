@@ -295,12 +295,12 @@ func TestGetDeleteStatement(t *testing.T) {
 	}
 }
 func TestGetTableAlias(t *testing.T) {
-	v := new(ToSql)
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema}
 	n := TableAlias{Binary{table, SqlLiteral{"u"}}}
 
+	v := ToSql{connection}
 	s := v.GetTableAlias(n)
 	if s != "`Users` `u`" {
 		t.Log(s)
@@ -637,12 +637,12 @@ func TestGetOn(t *testing.T) {
 // ----- not generated ----
 
 func TestGetField(t *testing.T) {
-	v := new(ToSql)
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema}
 
 	n := Field{table, table.ColumnMap["id"]}
+	v := ToSql{connection}
 
 	s := v.GetField(n)
 	if s != "`Users`.`id`" {
@@ -652,7 +652,6 @@ func TestGetField(t *testing.T) {
 }
 
 func TestGetSelectCore(t *testing.T) {
-	v := new(ToSql)
 	n := new(SelectCore)
 
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
@@ -665,6 +664,7 @@ func TestGetSelectCore(t *testing.T) {
 	n.Source = JoinSource{table, make([]Node, 0)}
 	n.Wheres = []Node{f.Eq(Literal{1})}
 
+	v := ToSql{connection}
 	s := v.GetSelectCore(*n)
 	if s != "SELECT * FROM `Users` `u` WHERE `u`.`id` = 1" {
 		t.Log(s)
@@ -674,11 +674,11 @@ func TestGetSelectCore(t *testing.T) {
 }
 
 func TestVisitGetTable(t *testing.T) {
-	v := new(ToSql)
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	table, _ := connection.GetTable("Users")
 	n := Table{table}
 
+	v := ToSql{connection}
 	s := v.GetTable(n)
 	if s != "`Users`" {
 		t.Log(s)
@@ -687,11 +687,11 @@ func TestVisitGetTable(t *testing.T) {
 }
 
 func TestVisitGetTableAlias(t *testing.T) {
-	v := new(ToSql)
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	table, _ := connection.GetTable("Users")
 	n := Table{table}
 	n.Alias = "u"
+	v := ToSql{connection}
 	s := v.GetTable(n)
 	if s != "`Users` `u`" {
 		t.Log(s)
@@ -700,13 +700,13 @@ func TestVisitGetTableAlias(t *testing.T) {
 }
 
 func TestVisitGetJoinSource(t *testing.T) {
-	v := new(ToSql)
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema}
 	table.Alias = "u"
 
 	n := JoinSource{table, make([]Node, 0)}
+	v := ToSql{connection}
 	s := v.GetJoinSource(n)
 	if s != "FROM `Users` `u` " {
 		t.Log(s)
@@ -725,7 +725,6 @@ func TestVisitGetSqlLiteral(t *testing.T) {
 }
 
 func TestVisitGetSelectStatement(t *testing.T) {
-	v := new(ToSql)
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema}
@@ -746,6 +745,7 @@ func TestVisitGetSelectStatement(t *testing.T) {
 	n.Orders = append(n.Orders, f)
 	n.Limit = Limit{Unary{Literal{1}}}
 	n.Offset = Offset{Unary{Literal{1}}}
+	v := ToSql{connection}
 	s := v.GetSelectStatement(n)
 	if s != "FROM `Users` `u` " {
 		t.Log(s)
