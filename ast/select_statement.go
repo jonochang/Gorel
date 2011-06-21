@@ -15,6 +15,7 @@ func (n SelectStatement) Visit(v Visitor) (s string) {
 }
 
 func NewSelectStatement() (n SelectStatement) {
-	n.Cores = []Node{SelectCore{}}
+	js := JoinSource{nil, make([]Node, 0)}
+	n.Cores = []Node{SelectCore{Source: js}}
 	return
 }
