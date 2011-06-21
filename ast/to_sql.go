@@ -340,7 +340,7 @@ func (c ToSql) GetTableAlias(n TableAlias) (s string) {
 	rs := ""
 	if n.Right != nil {
 		source := n.Right.Visit(c)
-		rs = n.Left.(Table).Connection.QuoteTableName(source)
+		rs = c.Connection.QuoteTableName(source)
 	}
 
 	s = fmt.Sprintf("%v %v", ls, rs)
@@ -699,10 +699,10 @@ func (c ToSql) GetOn(n On) (s string) {
 }
 
 func (c ToSql) GetField(n Field) (s string) {
-	quoted_column_name := n.Table.Connection.QuoteColumnName(n.Column.Name)
-	quoted_table_name := n.Table.Connection.QuoteTableName(n.Table.Name)
+	quoted_column_name := c.Connection.QuoteColumnName(n.Column.Name)
+	quoted_table_name := c.Connection.QuoteTableName(n.Table.Name)
 	if n.Table.Alias != "" {
-		quoted_table_name = n.Table.Connection.QuoteTableName(n.Table.Alias)
+		quoted_table_name = c.Connection.QuoteTableName(n.Table.Alias)
 	}
 
 	s = fmt.Sprintf("%v.%v", quoted_table_name, quoted_column_name)
