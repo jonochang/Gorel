@@ -759,7 +759,7 @@ func (c ToSql) GetJoinSource(n JoinSource) (s string) {
 }
 
 func (c ToSql) GetSqlLiteral(n SqlLiteral) (s string) {
-	s = n.string
+	s = n.Value
 	return
 }
 
