@@ -15,7 +15,6 @@ func (n SelectStatement) Visit(v Visitor) (s string) {
 }
 
 func NewSelectStatement() (n SelectStatement) {
-	n = *new(SelectStatement)
 	n.Cores = []Node{SelectCore{}}
 	return
 }
