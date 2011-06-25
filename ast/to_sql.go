@@ -700,9 +700,9 @@ func (c ToSql) GetOn(n On) (s string) {
 
 func (c ToSql) GetField(n Field) (s string) {
 	quoted_column_name := c.Connection.QuoteColumnName(n.Column.Name)
-	quoted_table_name := c.Connection.QuoteTableName(n.Table.Name)
-	if n.Table.Alias != "" {
-		quoted_table_name = c.Connection.QuoteTableName(n.Table.Alias)
+	quoted_table_name := c.Connection.QuoteTableName(n.Table.GetName())
+	if n.Table.GetNameAlias() != "" {
+		quoted_table_name = c.Connection.QuoteTableName(n.Table.GetNameAlias())
 	}
 
 	s = fmt.Sprintf("%v.%v", quoted_table_name, quoted_column_name)

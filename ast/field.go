@@ -5,7 +5,7 @@ import (
 )
 
 type Field struct {
-	Table  Table
+	Table  TableNameAlias
 	Column db.ColumnSchema
 }
 

@@ -368,3 +368,14 @@ func (n On) Visit(v Visitor) (s string) {
 	s = v.GetOn(n)
 	return
 }
+
+
+// ------- NOT GENERATED -----------
+func (n TableAlias) GetNameAlias() (s string) {
+  return n.Right.(SqlLiteral).Value
+}
+
+func (n TableAlias) GetName() (s string) {
+  return n.Left.(Table).Name
+}
+
