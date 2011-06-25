@@ -562,7 +562,7 @@ func (c ToSql) GetInnerJoin(n InnerJoin) (s string) {
 		rs = n.Right.Visit(c)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("INNER JOIN %v %v", ls, rs)
 	return
 }
 
@@ -735,11 +735,11 @@ func (c ToSql) GetSelectCore(n SelectCore) (s string) {
 }
 
 func (c ToSql) GetTable(n Table) (s string) {
-	quoted_table_name := n.Connection.QuoteTableName(n.Name)
+	quoted_table_name := c.Connection.QuoteTableName(n.Name)
 	if n.Alias == "" {
 		s = quoted_table_name
 	} else {
-		quoted_table_alias := n.Connection.QuoteTableName(n.Alias)
+		quoted_table_alias := c.Connection.QuoteTableName(n.Alias)
 		s = fmt.Sprintf("%v %v", quoted_table_name, quoted_table_alias)
 	}
 	return

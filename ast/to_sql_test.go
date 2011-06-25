@@ -489,13 +489,18 @@ func TestGetSubtraction(t *testing.T) {
 //-----------------Join----------------
 func TestGetInnerJoin(t *testing.T) {
 	v := new(ToSql)
+	v.Connection, _ = db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	n := new(InnerJoin)
-
+  table := Table{db.TableSchema{Name:"users"}}
+  n.Left = table
+  n.Right = On{Unary{Equality{Binary{Literal{1}, Literal{2}}}}}
 	s := v.GetInnerJoin(*n)
-	if s != "" {
+	if s != "INNER JOIN `users` ON 1 = 2" {
+		t.Log(s)
 		t.Errorf("failed to get InnerJoin ")
 	}
 }
+
 func TestGetOuterJoin(t *testing.T) {
 	v := new(ToSql)
 	n := new(OuterJoin)
