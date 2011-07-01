@@ -2,11 +2,12 @@ package ast
 
 import (
 	"db"
+  "fmt"
 )
 
 type Table struct {
 	db.TableSchema
-  //aliases []TableAlias
+  Aliases []Node
 }
 
 func (n Table) Visit(v Visitor) (s string) {
@@ -15,17 +16,22 @@ func (n Table) Visit(v Visitor) (s string) {
 }
 
 func (n Table) GetNameAlias() (s string) {
-  return n.Alias
+  length := len(n.Aliases)
+  s = fmt.Sprintf("%v_%v", n.Name, length + 1)
+  return
 }
 
-func (n Table) GetName() (s string) {
+func (n Table) GetName() (string) {
   return n.Name
 }
 
-//func (n Table) GetTableAlias() (ta TableAlias) {
-//  length := len(n.Aliases)
-//  ta.Left = n
-//  ta.Right = fmt.Sprintf("%v_%v", n.Name, length+1)
-//  ta.Left.Alias = ta.Right //set alias for fields
-//  return ta
-//}
+func (n Table) HasAlias() (bool) {
+  return len(n.Aliases) > 0
+}
+
+func (n Table) GetTableAlias() (ta TableAlias) {
+  ta.Left = n
+  ta.Right = SqlLiteral{n.GetNameAlias()}
+  n.Aliases = append(n.Aliases, ta)
+  return ta
+}

@@ -294,10 +294,11 @@ func TestGetDeleteStatement(t *testing.T) {
 		t.Errorf("failed to get DeleteStatement ")
 	}
 }
+
 func TestGetTableAlias(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
-	table := Table{tableSchema}
+	table := Table{tableSchema, []Node{}}
 	n := TableAlias{Binary{table, SqlLiteral{"u"}}}
 
 	v := ToSql{connection}
@@ -307,6 +308,7 @@ func TestGetTableAlias(t *testing.T) {
 		t.Errorf("failed to get TableAlias ")
 	}
 }
+
 func TestGetExcept(t *testing.T) {
 	v := new(ToSql)
 	n := new(Except)
@@ -491,7 +493,7 @@ func TestGetInnerJoin(t *testing.T) {
 	v := new(ToSql)
 	v.Connection, _ = db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	n := new(InnerJoin)
-  table := Table{db.TableSchema{Name:"users"}}
+  table := Table{db.TableSchema{Name:"users"}, []Node{}}
   n.Left = table
   n.Right = On{Unary{Equality{Binary{Literal{1}, Literal{2}}}}}
 	s := v.GetInnerJoin(*n)
@@ -644,7 +646,7 @@ func TestGetOn(t *testing.T) {
 func TestGetField(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
-	table := Table{tableSchema}
+	table := Table{tableSchema, []Node{}}
 
 	n := Field{table, table.ColumnMap["id"]}
 	v := ToSql{connection}
@@ -661,12 +663,12 @@ func TestGetSelectCore(t *testing.T) {
 
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
-	table := Table{tableSchema}
-	table.Alias = "u"
-	f := Field{table, table.ColumnMap["id"]}
+	table := Table{tableSchema, []Node{}}
+	table_alias := TableAlias{Binary{table, SqlLiteral{"u"}}}
+	f := Field{table_alias, table.ColumnMap["id"]}
 
 	n.Projections = []Node{SqlLiteral{"*"}}
-	n.Source = JoinSource{table, make([]Node, 0)}
+	n.Source = JoinSource{table_alias, make([]Node, 0)}
 	n.Wheres = []Node{f.Eq(Literal{1})}
 
 	v := ToSql{connection}
@@ -681,7 +683,7 @@ func TestGetSelectCore(t *testing.T) {
 func TestVisitGetTable(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	table, _ := connection.GetTable("Users")
-	n := Table{table}
+	n := Table{table, []Node{}}
 
 	v := ToSql{connection}
 	s := v.GetTable(n)
@@ -694,11 +696,9 @@ func TestVisitGetTable(t *testing.T) {
 func TestVisitGetTableAlias(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	table, _ := connection.GetTable("Users")
-	n := Table{table}
-	n.Alias = "u"
-	v := ToSql{connection}
-	s := v.GetTable(n)
-	if s != "`Users` `u`" {
+	n := Table{table, []Node{}}
+	s := n.GetNameAlias()
+	if s != "Users_1" {
 		t.Log(s)
 		t.Errorf("failed to get table ")
 	}
@@ -707,10 +707,10 @@ func TestVisitGetTableAlias(t *testing.T) {
 func TestVisitGetJoinSource(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
-	table := Table{tableSchema}
-	table.Alias = "u"
+	table := Table{tableSchema, []Node{}}
+	table_alias := TableAlias{Binary{table, SqlLiteral{"u"}}}
 
-	n := JoinSource{table, make([]Node, 0)}
+	n := JoinSource{table_alias, make([]Node, 0)}
 	v := ToSql{connection}
 	s := v.GetJoinSource(n)
 	if s != "FROM `Users` `u` " {
@@ -732,9 +732,9 @@ func TestVisitGetSqlLiteral(t *testing.T) {
 func TestVisitGetSelectStatement(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
-	table := Table{tableSchema}
-	table.Alias = "u"
-	f := Field{table, table.ColumnMap["id"]}
+	table := Table{tableSchema, []Node{}}
+	table_alias := TableAlias{Binary{table, SqlLiteral{"u"}}}
+	f := Field{table_alias, table.ColumnMap["id"]}
 
 	n := NewSelectStatement()
 	if len(n.Cores) == 0 {
@@ -743,7 +743,7 @@ func TestVisitGetSelectStatement(t *testing.T) {
 
 	c := n.Cores[len(n.Cores)-1].(SelectCore)
 	c.Projections = []Node{SqlLiteral{"*"}}
-	c.Source = JoinSource{table, make([]Node, 0)}
+	c.Source = JoinSource{table_alias, make([]Node, 0)}
 	c.Wheres = []Node{f.Eq(Literal{1})}
 
 	n.Cores[len(n.Cores)-1] = c

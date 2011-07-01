@@ -701,7 +701,7 @@ func (c ToSql) GetOn(n On) (s string) {
 func (c ToSql) GetField(n Field) (s string) {
 	quoted_column_name := c.Connection.QuoteColumnName(n.Column.Name)
 	quoted_table_name := c.Connection.QuoteTableName(n.Table.GetName())
-	if n.Table.GetNameAlias() != "" {
+	if n.Table.HasAlias() {
 		quoted_table_name = c.Connection.QuoteTableName(n.Table.GetNameAlias())
 	}
 
@@ -736,11 +736,11 @@ func (c ToSql) GetSelectCore(n SelectCore) (s string) {
 
 func (c ToSql) GetTable(n Table) (s string) {
 	quoted_table_name := c.Connection.QuoteTableName(n.Name)
-	if n.Alias == "" {
-		s = quoted_table_name
-	} else {
-		quoted_table_alias := c.Connection.QuoteTableName(n.Alias)
+	if n.HasAlias() {
+		quoted_table_alias := c.Connection.QuoteTableName(n.GetNameAlias())
 		s = fmt.Sprintf("%v %v", quoted_table_name, quoted_table_alias)
+	} else {
+		s = quoted_table_name
 	}
 	return
 }

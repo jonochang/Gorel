@@ -60,6 +60,38 @@ func (m *SelectManager) From(table ast.Node) *SelectManager {
 	return m
 }
 
+func (m *SelectManager) Join(table ast.Node) *SelectManager {
+  return m.InnerJoin(table)
+}
+
+func (m *SelectManager) InnerJoin(table ast.Node) *SelectManager {
+	//TODO get pointer to SelectCore
+	c := m.Ast.Cores[len(m.Ast.Cores)-1].(ast.SelectCore)
+	js := c.Source.(ast.JoinSource)
+
+  r := js.JoinOn
+  r = append(r, ast.InnerJoin{ast.Join{ast.Binary{table, nil}}})
+  js.JoinOn = r
+
+  c.Source = js
+	m.Ast.Cores[len(m.Ast.Cores)-1] = c
+	return m
+}
+
+func (m *SelectManager) OuterJoin(table ast.Node) *SelectManager {
+	//TODO get pointer to SelectCore
+	c := m.Ast.Cores[len(m.Ast.Cores)-1].(ast.SelectCore)
+	js := c.Source.(ast.JoinSource)
+
+  r := js.JoinOn
+  r = append(r, ast.OuterJoin{ast.Join{ast.Binary{table, nil}}})
+  js.JoinOn = r
+
+  c.Source = js
+	m.Ast.Cores[len(m.Ast.Cores)-1] = c
+	return m
+}
+
 func (m *SelectManager) Project(any interface{}) *SelectManager {
 	switch val := any.(type) {
 	case ast.Node:

@@ -379,3 +379,7 @@ func (n TableAlias) GetName() (s string) {
   return n.Left.(Table).Name
 }
 
+func (n TableAlias) HasAlias() (bool) {
+  return true
+}
+

@@ -22,5 +22,4 @@ type TableSchema struct {
 	Name       string
 	ColumnMap  map[string]ColumnSchema
 	Connection Connection
-	Alias      string
 }
