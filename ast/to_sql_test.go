@@ -673,7 +673,7 @@ func TestGetSelectCore(t *testing.T) {
 
 	v := ToSql{connection}
 	s := v.GetSelectCore(*n)
-	if s != "SELECT * FROM `Users` `u` WHERE `u`.`id` = 1" {
+	if s != "SELECT * FROM `Users` `u`  WHERE `u`.`id` = 1" {
 		t.Log(s)
 		t.Errorf("failed to get Select Core ")
 	}
@@ -752,7 +752,7 @@ func TestVisitGetSelectStatement(t *testing.T) {
 	n.Offset = Offset{Unary{Literal{1}}}
 	v := ToSql{connection}
 	s := v.GetSelectStatement(n)
-	if s != "FROM `Users` `u` " {
+	if s != "SELECT * FROM `Users` `u`  WHERE `u`.`id` = 1 ORDER BY `u`.`id` LIMIT 1 OFFSET 1" {
 		t.Log(s)
 		t.Errorf("failed to get select statement ")
 	}
