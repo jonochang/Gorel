@@ -752,7 +752,7 @@ func TestVisitGetSelectStatement(t *testing.T) {
 		t.Errorf("Expected a core in new select statement")
 	}
 
-	c := n.Cores[len(n.Cores)-1].(SelectCore)
+	c := n.Cores[len(n.Cores)-1].(*SelectCore)
 	c.Projections = []Node{SqlLiteral{"*"}}
 	c.Source = JoinSource{table_alias, make([]Node, 0)}
 	c.Wheres = []Node{f.Eq(&Literal{1})}

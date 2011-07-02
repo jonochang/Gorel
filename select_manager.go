@@ -46,9 +46,8 @@ func (m SelectManager) As(alias string) (n ast.Node) {
 }
 
 func (m *SelectManager) From(table ast.Node) *SelectManager {
-	//TODO get pointer to SelectCore
-	c := m.Ast.Cores[len(m.Ast.Cores)-1].(ast.SelectCore)
-	js := c.Source.(ast.JoinSource)
+	c := m.Ast.Cores[len(m.Ast.Cores)-1].(*ast.SelectCore)
+	js := c.Source.(*ast.JoinSource)
 	switch val := table.(type) {
 	case ast.InnerJoin, ast.OuterJoin, ast.StringJoin:
 		r := js.JoinOn
@@ -57,8 +56,7 @@ func (m *SelectManager) From(table ast.Node) *SelectManager {
 	default:
 		js.Source = val
 	}
-	c.Source = js
-	m.Ast.Cores[len(m.Ast.Cores)-1] = c
+
 	return m
 }
 
@@ -67,30 +65,24 @@ func (m *SelectManager) Join(table ast.Node) *SelectManager {
 }
 
 func (m *SelectManager) InnerJoin(table ast.Node) *SelectManager {
-	//TODO get pointer to SelectCore
-	c := m.Ast.Cores[len(m.Ast.Cores)-1].(ast.SelectCore)
-	js := c.Source.(ast.JoinSource)
+	c := m.Ast.Cores[len(m.Ast.Cores)-1].(*ast.SelectCore)
+	js := c.Source.(*ast.JoinSource)
 
 	r := js.JoinOn
 	r = append(r, ast.InnerJoin{&ast.BaseJoin{table, nil}})
 	js.JoinOn = r
 
-	c.Source = js
-	m.Ast.Cores[len(m.Ast.Cores)-1] = c
 	return m
 }
 
 func (m *SelectManager) OuterJoin(table ast.Node) *SelectManager {
-	//TODO get pointer to SelectCore
-	c := m.Ast.Cores[len(m.Ast.Cores)-1].(ast.SelectCore)
-	js := c.Source.(ast.JoinSource)
+	c := m.Ast.Cores[len(m.Ast.Cores)-1].(*ast.SelectCore)
+	js := c.Source.(*ast.JoinSource)
 
 	r := js.JoinOn
 	r = append(r, ast.OuterJoin{&ast.BaseJoin{table, nil}})
 	js.JoinOn = r
 
-	c.Source = js
-	m.Ast.Cores[len(m.Ast.Cores)-1] = c
 	return m
 }
 
@@ -115,16 +107,15 @@ func (m *SelectManager) Project(any interface{}) *SelectManager {
 }
 
 func (m *SelectManager) project(n ast.Node) *SelectManager {
-	c := m.Ast.Cores[len(m.Ast.Cores)-1].(ast.SelectCore)
+	c := m.Ast.Cores[len(m.Ast.Cores)-1].(*ast.SelectCore)
 	c.Projections = append(c.Projections, n)
 	m.Ast.Cores[len(m.Ast.Cores)-1] = c
 	return m
 }
 
 func (m *SelectManager) On(n ast.Node) *SelectManager {
-	//TODO get pointer to SelectCore
-	c := m.Ast.Cores[len(m.Ast.Cores)-1].(ast.SelectCore)
-	js := c.Source.(ast.JoinSource)
+	c := m.Ast.Cores[len(m.Ast.Cores)-1].(*ast.SelectCore)
+	js := c.Source.(*ast.JoinSource)
 
 	last := js.JoinOn[len(js.JoinOn)-1]
 	last_join := last.(ast.Join)
@@ -132,8 +123,6 @@ func (m *SelectManager) On(n ast.Node) *SelectManager {
 	last_join.SetRight(on)
 
 	js.JoinOn[len(js.JoinOn)-1] = last_join
-	c.Source = js
-	m.Ast.Cores[len(m.Ast.Cores)-1] = c
 
 	return m
 }
