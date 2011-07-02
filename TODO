@@ -1,0 +1,1 @@
+* standardise the use of pointers for SelectCore to make SelectManager easier to use and clone
