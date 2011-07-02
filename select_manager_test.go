@@ -89,3 +89,27 @@ func TestSelectManagerOrder(t *testing.T) {
 		t.Errorf("Failed to get Order For for select manager")
 	}
 }
+
+func TestSelectManagerOffset(t *testing.T) {
+	connection, err := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+
+	if err != nil {
+		t.Log(err.String())
+	}
+
+	table, err := GetTable("Users", connection)
+	m1 := NewSelectManagerFromTable(-1, connection, table.Table)
+	m1.Offset(12)
+	s := m1.ToSql()
+	if s != "SELECT FROM `Users`  OFFSET 12" {
+		t.Log(s)
+		t.Errorf("Failed to get Offset for select manager")
+	}
+
+	m1.RemoveOffset()
+	s = m1.ToSql()
+	if s != "SELECT FROM `Users` " {
+		t.Log(s)
+		t.Errorf("Failed to get Offset for select manager")
+	}
+}

@@ -132,6 +132,18 @@ func (m *SelectManager) Order(n ...ast.Node) *SelectManager {
 	return m
 }
 
+func (m *SelectManager) Offset(amount int) *SelectManager {
+	n := new(ast.Offset)
+	n.Expression = &ast.Literal{amount}
+	m.Ast.Offset = n
+	return m
+}
+
+func (m *SelectManager) RemoveOffset() *SelectManager {
+	m.Ast.Offset = nil
+	return m
+}
+
 func (m SelectManager) ToSql() string {
 	return m.Ast.Visit(m.Visitor)
 }
