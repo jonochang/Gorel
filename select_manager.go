@@ -144,6 +144,18 @@ func (m *SelectManager) RemoveOffset() *SelectManager {
 	return m
 }
 
+func (m *SelectManager) Limit(amount int) *SelectManager {
+	n := new(ast.Limit)
+	n.Expression = &ast.Literal{amount}
+	m.Ast.Limit = n
+	return m
+}
+
+func (m *SelectManager) RemoveLimit() *SelectManager {
+	m.Ast.Limit = nil
+	return m
+}
+
 func (m SelectManager) ToSql() string {
 	return m.Ast.Visit(m.Visitor)
 }

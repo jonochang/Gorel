@@ -113,3 +113,27 @@ func TestSelectManagerOffset(t *testing.T) {
 		t.Errorf("Failed to get Offset for select manager")
 	}
 }
+
+func TestSelectManagerLimit(t *testing.T) {
+	connection, err := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+
+	if err != nil {
+		t.Log(err.String())
+	}
+
+	table, err := GetTable("Users", connection)
+	m1 := NewSelectManagerFromTable(-1, connection, table.Table)
+	m1.Limit(7)
+	s := m1.ToSql()
+	if s != "SELECT FROM `Users`  LIMIT 7" {
+		t.Log(s)
+		t.Errorf("Failed to get Offset for select manager")
+	}
+
+	m1.RemoveLimit()
+	s = m1.ToSql()
+	if s != "SELECT FROM `Users` " {
+		t.Log(s)
+		t.Errorf("Failed to get Offset for select manager")
+	}
+}
