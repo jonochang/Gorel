@@ -679,11 +679,10 @@ func (c *ToSql) GetUnqualifiedColumn(n UnqualifiedColumn) (s string) {
 }
 
 func (c *ToSql) GetGroup(n Group) (s string) {
-	expr := "*"
+	s = ""
 	if n.Expression != nil {
-		n.Expression.Visit(c)
+		s = n.Expression.Visit(c)
 	}
-	s = expr
 	return s
 
 }
@@ -738,6 +737,12 @@ func (c *ToSql) GetSelectCore(n SelectCore) (s string) {
 		wheres := c.VisitNodes(n.Wheres)
 		where_string := strings.Join(wheres, " AND ")
 		results = append(results, "WHERE "+where_string)
+	}
+
+	if len(n.Groups) > 0 {
+		groups := c.VisitNodes(n.Groups)
+		group_string := strings.Join(groups, ", ")
+		results = append(results, "GROUP BY "+group_string)
 	}
 
 	s = strings.Join(results, " ")

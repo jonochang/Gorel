@@ -132,6 +132,20 @@ func (m *SelectManager) Order(n ...ast.Node) *SelectManager {
 	return m
 }
 
+func (m *SelectManager) Group(n ...ast.Node) *SelectManager {
+	c := m.Ast.Cores[len(m.Ast.Cores)-1].(*ast.SelectCore)
+	groups := make([]ast.Node, 0)
+
+	for i := 0; i < len(n); i++ {
+		field := n[i]
+		group := ast.Group{ast.Unary{field}}
+		groups = append(groups, group)
+	}
+
+	c.Groups = append(c.Groups, groups...)
+	return m
+}
+
 func (m *SelectManager) Offset(amount int) *SelectManager {
 	n := new(ast.Offset)
 	n.Expression = &ast.Literal{amount}

@@ -137,3 +137,28 @@ func TestSelectManagerLimit(t *testing.T) {
 		t.Errorf("Failed to get Offset for select manager")
 	}
 }
+
+func TestSelectManagerGroup(t *testing.T) {
+	connection, err := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+
+	if err != nil {
+		t.Log(err.String())
+	}
+
+	table, err := GetTable("Users", connection)
+	m1 := NewSelectManagerFromTable(-1, connection, table.Table)
+	m2 := NewSelectManagerFromTable(-1, connection, table.Table)
+	m1.Group(table.Field("id"))
+	s := m1.ToSql()
+	if s != "SELECT FROM `Users`  GROUP BY `Users`.`id`" {
+		t.Log(s)
+		t.Errorf("Failed to get Order On for select manager")
+	}
+
+	m2.Group([]ast.Node{table.Field("id"), ast.SqlLiteral{"login"}}...)
+	s = m2.ToSql()
+	if s != "SELECT FROM `Users`  GROUP BY `Users`.`id`, login" {
+		t.Log(s)
+		t.Errorf("Failed to get Order For for select manager")
+	}
+}

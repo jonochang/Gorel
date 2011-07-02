@@ -609,12 +609,14 @@ func TestGetUnqualifiedColumn(t *testing.T) {
 		t.Errorf("failed to get UnqualifiedColumn ")
 	}
 }
+
 func TestGetGroup(t *testing.T) {
 	v := new(ToSql)
-	n := new(Group)
+	n := Group{Unary{SqlLiteral{"test"}}}
 
-	s := v.GetGroup(*n)
-	if s != "" {
+	s := v.GetGroup(n)
+	if s != "test" {
+		t.Log(s)
 		t.Errorf("failed to get Group ")
 	}
 }
