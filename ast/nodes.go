@@ -43,13 +43,13 @@ type Function struct {
 type InfixOperation struct{ Binary }
 
 type Join interface {
-  Visit(v Visitor) (s string)
-  SetRight(n Node)
+	Visit(v Visitor) (s string)
+	SetRight(n Node)
 }
 
 type BaseJoin struct {
-  Left Node
-  Right Node
+	Left  Node
+	Right Node
 }
 
 type Unary struct {
@@ -380,21 +380,21 @@ func (n On) Visit(v Visitor) (s string) {
 
 // ------- NOT GENERATED -----------
 func (n TableAlias) GetNameAlias() (s string) {
-  return n.Right.(SqlLiteral).Value
+	return n.Right.(SqlLiteral).Value
 }
 
 func (n TableAlias) GetName() (s string) {
-  return n.Left.(Table).Name
+	return n.Left.(Table).Name
 }
 
-func (n TableAlias) HasAlias() (bool) {
-  return true
+func (n TableAlias) HasAlias() bool {
+	return true
 }
 
 func (n *BaseJoin) SetRight(r Node) {
-  n.Right = r
+	n.Right = r
 }
 
 func (n *BaseJoin) SetLeft(r Node) {
-  n.Left = r
+	n.Left = r
 }

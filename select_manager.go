@@ -13,14 +13,14 @@ type SelectManager struct {
 }
 
 func VisitorsFor(adapter db.Adapter, connection db.Connection) (v ast.Visitor) {
-  switch adapter {
+	switch adapter {
 	case db.Adapter_MySQL:
 		mysql := ast.MySQL{ast.ToSql{connection}}
-    v = &mysql
+		v = &mysql
 	case db.Adapter_PostgreSQL:
 	default:
 		tosql := ast.ToSql{connection}
-    v = &tosql
+		v = &tosql
 	}
 	return
 }
@@ -63,7 +63,7 @@ func (m *SelectManager) From(table ast.Node) *SelectManager {
 }
 
 func (m *SelectManager) Join(table ast.Node) *SelectManager {
-  return m.InnerJoin(table)
+	return m.InnerJoin(table)
 }
 
 func (m *SelectManager) InnerJoin(table ast.Node) *SelectManager {
@@ -71,11 +71,11 @@ func (m *SelectManager) InnerJoin(table ast.Node) *SelectManager {
 	c := m.Ast.Cores[len(m.Ast.Cores)-1].(ast.SelectCore)
 	js := c.Source.(ast.JoinSource)
 
-  r := js.JoinOn
-  r = append(r, ast.InnerJoin{&ast.BaseJoin{table, nil}})
-  js.JoinOn = r
+	r := js.JoinOn
+	r = append(r, ast.InnerJoin{&ast.BaseJoin{table, nil}})
+	js.JoinOn = r
 
-  c.Source = js
+	c.Source = js
 	m.Ast.Cores[len(m.Ast.Cores)-1] = c
 	return m
 }
@@ -85,11 +85,11 @@ func (m *SelectManager) OuterJoin(table ast.Node) *SelectManager {
 	c := m.Ast.Cores[len(m.Ast.Cores)-1].(ast.SelectCore)
 	js := c.Source.(ast.JoinSource)
 
-  r := js.JoinOn
-  r = append(r, ast.OuterJoin{&ast.BaseJoin{table, nil}})
-  js.JoinOn = r
+	r := js.JoinOn
+	r = append(r, ast.OuterJoin{&ast.BaseJoin{table, nil}})
+	js.JoinOn = r
 
-  c.Source = js
+	c.Source = js
 	m.Ast.Cores[len(m.Ast.Cores)-1] = c
 	return m
 }
@@ -126,16 +126,16 @@ func (m *SelectManager) On(n ast.Node) *SelectManager {
 	c := m.Ast.Cores[len(m.Ast.Cores)-1].(ast.SelectCore)
 	js := c.Source.(ast.JoinSource)
 
-  last := js.JoinOn[len(js.JoinOn) - 1]
-  last_join := last.(ast.Join)
-  on := ast.On{ast.Unary{n}}  
-  last_join.SetRight(on)
+	last := js.JoinOn[len(js.JoinOn)-1]
+	last_join := last.(ast.Join)
+	on := ast.On{ast.Unary{n}}
+	last_join.SetRight(on)
 
-  js.JoinOn[len(js.JoinOn) - 1] = last_join
-  c.Source = js
+	js.JoinOn[len(js.JoinOn)-1] = last_join
+	c.Source = js
 	m.Ast.Cores[len(m.Ast.Cores)-1] = c
 
-  return m
+	return m
 }
 
 func (m SelectManager) ToSql() string {

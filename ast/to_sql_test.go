@@ -492,8 +492,8 @@ func TestGetSubtraction(t *testing.T) {
 func TestGetInnerJoin(t *testing.T) {
 	v := new(ToSql)
 	v.Connection, _ = db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
-  table := Table{db.TableSchema{Name:"users"}, []Node{}}
-  on := On{Unary{Equality{Binary{&Literal{1}, &Literal{2}}}}}
+	table := Table{db.TableSchema{Name: "users"}, []Node{}}
+	on := On{Unary{Equality{Binary{&Literal{1}, &Literal{2}}}}}
 	n := InnerJoin{&BaseJoin{table, on}}
 	s := v.GetInnerJoin(n)
 	if s != "INNER JOIN `users` ON 1 = 2" {
@@ -505,8 +505,8 @@ func TestGetInnerJoin(t *testing.T) {
 func TestGetOuterJoin(t *testing.T) {
 	v := new(ToSql)
 	v.Connection, _ = db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
-  table := Table{db.TableSchema{Name:"users"}, []Node{}}
-  on := On{Unary{Equality{Binary{&Literal{1}, &Literal{2}}}}}
+	table := Table{db.TableSchema{Name: "users"}, []Node{}}
+	on := On{Unary{Equality{Binary{&Literal{1}, &Literal{2}}}}}
 	n := OuterJoin{&BaseJoin{table, on}}
 
 	s := v.GetOuterJoin(n)

@@ -72,4 +72,4 @@ type Visitor interface {
 	GetSelectStatement(n SelectStatement) string
 	GetWith(n With) string
 	GetJoin(n Join) string
-} 
+}
