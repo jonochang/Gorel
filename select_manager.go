@@ -127,6 +127,11 @@ func (m *SelectManager) On(n ast.Node) *SelectManager {
 	return m
 }
 
+func (m *SelectManager) Order(n ...ast.Node) *SelectManager {
+	m.Ast.Orders = append(m.Ast.Orders, n...)
+	return m
+}
+
 func (m SelectManager) ToSql() string {
 	return m.Ast.Visit(m.Visitor)
 }

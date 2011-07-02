@@ -64,3 +64,28 @@ func TestSelectManagerJoinOn(t *testing.T) {
 		t.Errorf("Failed to get Join On for select manager")
 	}
 }
+
+func TestSelectManagerOrder(t *testing.T) {
+	connection, err := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+
+	if err != nil {
+		t.Log(err.String())
+	}
+
+	table, err := GetTable("Users", connection)
+	m1 := NewSelectManagerFromTable(-1, connection, table.Table)
+	m2 := m1
+	m1.Order(table.Field("id"))
+	s := m1.ToSql()
+	if s != "SELECT FROM `Users`  ORDER BY `Users`.`id`" {
+		t.Log(s)
+		t.Errorf("Failed to get Order On for select manager")
+	}
+
+	m2.Order([]ast.Node{table.Field("id"), ast.SqlLiteral{"login"}}...)
+	s = m2.ToSql()
+	if s != "SELECT FROM `Users`  ORDER BY `Users`.`id`, login" {
+		t.Log(s)
+		t.Errorf("Failed to get Order For for select manager")
+	}
+}

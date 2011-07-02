@@ -815,4 +815,3 @@ func (c *ToSql) GetSelectStatement(n SelectStatement) (s string) {
 func (c *ToSql) GetWith(n With) (s string) {
 	return
 }
-
