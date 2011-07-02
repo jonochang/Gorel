@@ -13,12 +13,14 @@ type SelectManager struct {
 }
 
 func VisitorsFor(adapter db.Adapter, connection db.Connection) (v ast.Visitor) {
-	switch adapter {
+  switch adapter {
 	case db.Adapter_MySQL:
-		v = ast.MySQL{ast.ToSql{connection}}
+		mysql := ast.MySQL{ast.ToSql{connection}}
+    v = &mysql
 	case db.Adapter_PostgreSQL:
 	default:
-		v = ast.ToSql{connection}
+		tosql := ast.ToSql{connection}
+    v = &tosql
 	}
 	return
 }

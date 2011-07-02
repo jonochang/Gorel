@@ -12,12 +12,12 @@ type ToSql struct {
 	Connection db.Connection
 }
 
-func (c ToSql) GetLiteral(n Literal) (s string) {
+func (c *ToSql) GetLiteral(n Literal) (s string) {
 	s = c.Convert(n.Value)
 	return
 }
 
-func (c ToSql) Convert(unknown interface{}) (s string) {
+func (c *ToSql) Convert(unknown interface{}) (s string) {
 	switch val := unknown.(type) {
 	case string:
 		s = strconv.Quote(val)
@@ -41,7 +41,7 @@ func (c ToSql) Convert(unknown interface{}) (s string) {
 	return
 }
 
-func (c ToSql) ConvertUnknown(unknown interface{}) (s string) {
+func (c *ToSql) ConvertUnknown(unknown interface{}) (s string) {
 	unknownVal := reflect.ValueOf(unknown)
 	kind := unknownVal.Kind()
 	switch kind {
@@ -54,7 +54,7 @@ func (c ToSql) ConvertUnknown(unknown interface{}) (s string) {
 	}
 	return
 }
-func (c ToSql) ConvertVal(val reflect.Value) (s string) {
+func (c *ToSql) ConvertVal(val reflect.Value) (s string) {
 	switch val.Kind() {
 	case reflect.Bool:
 		s = c.Convert(val.Bool())
@@ -77,7 +77,7 @@ func (c ToSql) ConvertVal(val reflect.Value) (s string) {
 	return
 }
 
-func (b ToSql) VisitNodes(nodes []Node) (s []string) {
+func (b *ToSql) VisitNodes(nodes []Node) (s []string) {
 	s = make([]string, 0)
 	for i := 0; i < len(nodes); i++ {
 		if nodes[i] != nil {
@@ -87,14 +87,14 @@ func (b ToSql) VisitNodes(nodes []Node) (s []string) {
 	return
 }
 
-func (b ToSql) VisitNodesString(nodes []Node, sep string) (s string) {
+func (b *ToSql) VisitNodesString(nodes []Node, sep string) (s string) {
 	results := b.VisitNodes(nodes)
 	s = strings.Join(results, sep)
 	return
 }
 
 //-----------------And----------------
-func (c ToSql) GetAnd(n And) (s string) {
+func (c *ToSql) GetAnd(n And) (s string) {
 	results := c.VisitNodes(n.Children)
 	s = strings.Join(results, " AND ")
 	return
@@ -102,7 +102,7 @@ func (c ToSql) GetAnd(n And) (s string) {
 
 
 //-----------------Binary----------------
-func (c ToSql) GetBetween(n Between) (s string) {
+func (c *ToSql) GetBetween(n Between) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -117,7 +117,7 @@ func (c ToSql) GetBetween(n Between) (s string) {
 	return
 }
 
-func (c ToSql) GetNotEqual(n NotEqual) (s string) {
+func (c *ToSql) GetNotEqual(n NotEqual) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -136,7 +136,7 @@ func (c ToSql) GetNotEqual(n NotEqual) (s string) {
 	return
 }
 
-func (c ToSql) GetAssignment(n Assignment) (s string) {
+func (c *ToSql) GetAssignment(n Assignment) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -151,7 +151,7 @@ func (c ToSql) GetAssignment(n Assignment) (s string) {
 	return
 }
 
-func (c ToSql) GetOr(n Or) (s string) {
+func (c *ToSql) GetOr(n Or) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -166,7 +166,7 @@ func (c ToSql) GetOr(n Or) (s string) {
 	return
 }
 
-func (c ToSql) GetAs(n As) (s string) {
+func (c *ToSql) GetAs(n As) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -181,7 +181,7 @@ func (c ToSql) GetAs(n As) (s string) {
 	return
 }
 
-func (c ToSql) GetGreaterThan(n GreaterThan) (s string) {
+func (c *ToSql) GetGreaterThan(n GreaterThan) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -196,7 +196,7 @@ func (c ToSql) GetGreaterThan(n GreaterThan) (s string) {
 	return
 }
 
-func (c ToSql) GetGreaterThanOrEqual(n GreaterThanOrEqual) (s string) {
+func (c *ToSql) GetGreaterThanOrEqual(n GreaterThanOrEqual) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -211,7 +211,7 @@ func (c ToSql) GetGreaterThanOrEqual(n GreaterThanOrEqual) (s string) {
 	return
 }
 
-func (c ToSql) GetLessThan(n LessThan) (s string) {
+func (c *ToSql) GetLessThan(n LessThan) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -226,7 +226,7 @@ func (c ToSql) GetLessThan(n LessThan) (s string) {
 	return
 }
 
-func (c ToSql) GetLessThanOrEqual(n LessThanOrEqual) (s string) {
+func (c *ToSql) GetLessThanOrEqual(n LessThanOrEqual) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -241,7 +241,7 @@ func (c ToSql) GetLessThanOrEqual(n LessThanOrEqual) (s string) {
 	return
 }
 
-func (c ToSql) GetMatches(n Matches) (s string) {
+func (c *ToSql) GetMatches(n Matches) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -256,7 +256,7 @@ func (c ToSql) GetMatches(n Matches) (s string) {
 	return
 }
 
-func (c ToSql) GetDoesNotMatch(n DoesNotMatch) (s string) {
+func (c *ToSql) GetDoesNotMatch(n DoesNotMatch) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -271,7 +271,7 @@ func (c ToSql) GetDoesNotMatch(n DoesNotMatch) (s string) {
 	return
 }
 
-func (c ToSql) GetNotIn(n NotIn) (s string) {
+func (c *ToSql) GetNotIn(n NotIn) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -286,7 +286,7 @@ func (c ToSql) GetNotIn(n NotIn) (s string) {
 	return
 }
 
-func (c ToSql) GetOrdering(n Ordering) (s string) {
+func (c *ToSql) GetOrdering(n Ordering) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -301,7 +301,7 @@ func (c ToSql) GetOrdering(n Ordering) (s string) {
 	return
 }
 
-func (c ToSql) GetValues(n Values) (s string) {
+func (c *ToSql) GetValues(n Values) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -316,7 +316,7 @@ func (c ToSql) GetValues(n Values) (s string) {
 	return
 }
 
-func (c ToSql) GetDeleteStatement(n DeleteStatement) (s string) {
+func (c *ToSql) GetDeleteStatement(n DeleteStatement) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -331,7 +331,7 @@ func (c ToSql) GetDeleteStatement(n DeleteStatement) (s string) {
 	return
 }
 
-func (c ToSql) GetTableAlias(n TableAlias) (s string) {
+func (c *ToSql) GetTableAlias(n TableAlias) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -347,7 +347,7 @@ func (c ToSql) GetTableAlias(n TableAlias) (s string) {
 	return
 }
 
-func (c ToSql) GetExcept(n Except) (s string) {
+func (c *ToSql) GetExcept(n Except) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -362,7 +362,7 @@ func (c ToSql) GetExcept(n Except) (s string) {
 	return
 }
 
-func (c ToSql) GetIntersect(n Intersect) (s string) {
+func (c *ToSql) GetIntersect(n Intersect) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -377,7 +377,7 @@ func (c ToSql) GetIntersect(n Intersect) (s string) {
 	return
 }
 
-func (c ToSql) GetUnion(n Union) (s string) {
+func (c *ToSql) GetUnion(n Union) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -392,7 +392,7 @@ func (c ToSql) GetUnion(n Union) (s string) {
 	return
 }
 
-func (c ToSql) GetUnionAll(n UnionAll) (s string) {
+func (c *ToSql) GetUnionAll(n UnionAll) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -409,14 +409,14 @@ func (c ToSql) GetUnionAll(n UnionAll) (s string) {
 
 
 //-----------------Equality----------------
-func (c ToSql) GetEquality(n Equality) (s string) {
+func (c *ToSql) GetEquality(n Equality) (s string) {
 	ls := n.Left.Visit(c)
 	rs := n.Right.Visit(c)
 	s = fmt.Sprintf("%v = %v", ls, rs)
 	return
 }
 
-func (c ToSql) GetIn(n In) (s string) {
+func (c *ToSql) GetIn(n In) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -433,7 +433,7 @@ func (c ToSql) GetIn(n In) (s string) {
 
 
 //-----------------Function----------------
-func (c ToSql) GetCount(n Count) (s string) {
+func (c *ToSql) GetCount(n Count) (s string) {
 	expressions := c.VisitNodesString(n.Expressions, ", ")
 	alias := n.Alias.Visit(c)
 	distinct := n.Distinct
@@ -442,7 +442,7 @@ func (c ToSql) GetCount(n Count) (s string) {
 
 }
 
-func (c ToSql) GetSum(n Sum) (s string) {
+func (c *ToSql) GetSum(n Sum) (s string) {
 	expressions := c.VisitNodesString(n.Expressions, ", ")
 	alias := n.Alias.Visit(c)
 	distinct := n.Distinct
@@ -451,7 +451,7 @@ func (c ToSql) GetSum(n Sum) (s string) {
 
 }
 
-func (c ToSql) GetExists(n Exists) (s string) {
+func (c *ToSql) GetExists(n Exists) (s string) {
 	expressions := c.VisitNodesString(n.Expressions, ", ")
 	alias := n.Alias.Visit(c)
 	distinct := n.Distinct
@@ -460,7 +460,7 @@ func (c ToSql) GetExists(n Exists) (s string) {
 
 }
 
-func (c ToSql) GetMax(n Max) (s string) {
+func (c *ToSql) GetMax(n Max) (s string) {
 	expressions := c.VisitNodesString(n.Expressions, ", ")
 	alias := n.Alias.Visit(c)
 	distinct := n.Distinct
@@ -469,7 +469,7 @@ func (c ToSql) GetMax(n Max) (s string) {
 
 }
 
-func (c ToSql) GetMin(n Min) (s string) {
+func (c *ToSql) GetMin(n Min) (s string) {
 	expressions := c.VisitNodesString(n.Expressions, ", ")
 	alias := n.Alias.Visit(c)
 	distinct := n.Distinct
@@ -478,7 +478,7 @@ func (c ToSql) GetMin(n Min) (s string) {
 
 }
 
-func (c ToSql) GetAvg(n Avg) (s string) {
+func (c *ToSql) GetAvg(n Avg) (s string) {
 	expressions := c.VisitNodesString(n.Expressions, ", ")
 	alias := n.Alias.Visit(c)
 	distinct := n.Distinct
@@ -489,7 +489,7 @@ func (c ToSql) GetAvg(n Avg) (s string) {
 
 
 //-----------------InfixOperation----------------
-func (c ToSql) GetMultiplication(n Multiplication) (s string) {
+func (c *ToSql) GetMultiplication(n Multiplication) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -504,7 +504,7 @@ func (c ToSql) GetMultiplication(n Multiplication) (s string) {
 	return
 }
 
-func (c ToSql) GetDivision(n Division) (s string) {
+func (c *ToSql) GetDivision(n Division) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -519,7 +519,7 @@ func (c ToSql) GetDivision(n Division) (s string) {
 	return
 }
 
-func (c ToSql) GetAddition(n Addition) (s string) {
+func (c *ToSql) GetAddition(n Addition) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -534,7 +534,7 @@ func (c ToSql) GetAddition(n Addition) (s string) {
 	return
 }
 
-func (c ToSql) GetSubtraction(n Subtraction) (s string) {
+func (c *ToSql) GetSubtraction(n Subtraction) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -551,7 +551,7 @@ func (c ToSql) GetSubtraction(n Subtraction) (s string) {
 
 
 //-----------------Join----------------
-func (c ToSql) GetInnerJoin(n InnerJoin) (s string) {
+func (c *ToSql) GetInnerJoin(n InnerJoin) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -566,7 +566,7 @@ func (c ToSql) GetInnerJoin(n InnerJoin) (s string) {
 	return
 }
 
-func (c ToSql) GetOuterJoin(n OuterJoin) (s string) {
+func (c *ToSql) GetOuterJoin(n OuterJoin) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -581,7 +581,7 @@ func (c ToSql) GetOuterJoin(n OuterJoin) (s string) {
 	return
 }
 
-func (c ToSql) GetStringJoin(n StringJoin) (s string) {
+func (c *ToSql) GetStringJoin(n StringJoin) (s string) {
 	ls := ""
 	if n.Left != nil {
 		ls = n.Left.Visit(c)
@@ -598,7 +598,7 @@ func (c ToSql) GetStringJoin(n StringJoin) (s string) {
 
 
 //-----------------Unary----------------
-func (c ToSql) GetNot(n Not) (s string) {
+func (c *ToSql) GetNot(n Not) (s string) {
 	expr := ""
 	if n.Expression != nil {
 		expr = n.Expression.Visit(c)
@@ -608,7 +608,7 @@ func (c ToSql) GetNot(n Not) (s string) {
 
 }
 
-func (c ToSql) GetLock(n Lock) (s string) {
+func (c *ToSql) GetLock(n Lock) (s string) {
 	expr := "*"
 	if n.Expression != nil {
 		n.Expression.Visit(c)
@@ -618,7 +618,7 @@ func (c ToSql) GetLock(n Lock) (s string) {
 
 }
 
-func (c ToSql) GetOffset(n Offset) (s string) {
+func (c *ToSql) GetOffset(n Offset) (s string) {
 	expr := ""
 	if n.Expression != nil {
 		expr = n.Expression.Visit(c)
@@ -628,7 +628,7 @@ func (c ToSql) GetOffset(n Offset) (s string) {
 
 }
 
-func (c ToSql) GetLimit(n Limit) (s string) {
+func (c *ToSql) GetLimit(n Limit) (s string) {
 	expr := ""
 	if n.Expression != nil {
 		expr = n.Expression.Visit(c)
@@ -638,7 +638,7 @@ func (c ToSql) GetLimit(n Limit) (s string) {
 
 }
 
-func (c ToSql) GetTop(n Top) (s string) {
+func (c *ToSql) GetTop(n Top) (s string) {
 	expr := "*"
 	if n.Expression != nil {
 		n.Expression.Visit(c)
@@ -648,7 +648,7 @@ func (c ToSql) GetTop(n Top) (s string) {
 
 }
 
-func (c ToSql) GetHaving(n Having) (s string) {
+func (c *ToSql) GetHaving(n Having) (s string) {
 	expr := ""
 	if n.Expression != nil {
 		expr = n.Expression.Visit(c)
@@ -658,7 +658,7 @@ func (c ToSql) GetHaving(n Having) (s string) {
 
 }
 
-func (c ToSql) GetUnqualifiedColumn(n UnqualifiedColumn) (s string) {
+func (c *ToSql) GetUnqualifiedColumn(n UnqualifiedColumn) (s string) {
 	expr := "*"
 	if n.Expression != nil {
 		n.Expression.Visit(c)
@@ -668,7 +668,7 @@ func (c ToSql) GetUnqualifiedColumn(n UnqualifiedColumn) (s string) {
 
 }
 
-func (c ToSql) GetGroup(n Group) (s string) {
+func (c *ToSql) GetGroup(n Group) (s string) {
 	expr := "*"
 	if n.Expression != nil {
 		n.Expression.Visit(c)
@@ -678,7 +678,7 @@ func (c ToSql) GetGroup(n Group) (s string) {
 
 }
 
-func (c ToSql) GetGrouping(n Grouping) (s string) {
+func (c *ToSql) GetGrouping(n Grouping) (s string) {
 	expr := ""
 	if n.Expression != nil {
 		expr = n.Expression.Visit(c)
@@ -688,7 +688,7 @@ func (c ToSql) GetGrouping(n Grouping) (s string) {
 
 }
 
-func (c ToSql) GetOn(n On) (s string) {
+func (c *ToSql) GetOn(n On) (s string) {
 	expr := ""
 	if n.Expression != nil {
 		expr = n.Expression.Visit(c)
@@ -698,7 +698,7 @@ func (c ToSql) GetOn(n On) (s string) {
 
 }
 
-func (c ToSql) GetField(n Field) (s string) {
+func (c *ToSql) GetField(n Field) (s string) {
 	quoted_column_name := c.Connection.QuoteColumnName(n.Column.Name)
 	quoted_table_name := c.Connection.QuoteTableName(n.Table.GetName())
 	if n.Table.HasAlias() {
@@ -709,7 +709,7 @@ func (c ToSql) GetField(n Field) (s string) {
 	return
 }
 
-func (c ToSql) GetSelectCore(n SelectCore) (s string) {
+func (c *ToSql) GetSelectCore(n SelectCore) (s string) {
 	results := make([]string, 0)
 	results = append(results, "SELECT")
 
@@ -734,7 +734,7 @@ func (c ToSql) GetSelectCore(n SelectCore) (s string) {
 	return
 }
 
-func (c ToSql) GetTable(n Table) (s string) {
+func (c *ToSql) GetTable(n Table) (s string) {
 	quoted_table_name := c.Connection.QuoteTableName(n.Name)
 	if n.HasAlias() {
 		quoted_table_alias := c.Connection.QuoteTableName(n.GetNameAlias())
@@ -745,7 +745,7 @@ func (c ToSql) GetTable(n Table) (s string) {
 	return
 }
 
-func (c ToSql) GetJoinSource(n JoinSource) (s string) {
+func (c *ToSql) GetJoinSource(n JoinSource) (s string) {
 	if n.Source == nil ||
 		n.JoinOn == nil {
 		return ""
@@ -758,12 +758,12 @@ func (c ToSql) GetJoinSource(n JoinSource) (s string) {
 	return
 }
 
-func (c ToSql) GetSqlLiteral(n SqlLiteral) (s string) {
+func (c *ToSql) GetSqlLiteral(n SqlLiteral) (s string) {
 	s = n.Value
 	return
 }
 
-func (c ToSql) GetSelectStatement(n SelectStatement) (s string) {
+func (c *ToSql) GetSelectStatement(n SelectStatement) (s string) {
 	results := make([]string, 0)
 
 	if n.With != nil {
@@ -802,11 +802,11 @@ func (c ToSql) GetSelectStatement(n SelectStatement) (s string) {
 	return
 }
 
-func (c ToSql) GetWith(n With) (s string) {
+func (c *ToSql) GetWith(n With) (s string) {
 	return
 }
 
-func (c ToSql) GetJoin(n Join) (s string) {
+func (c *ToSql) GetJoin(n Join) (s string) {
   //TODO change Join to Interface
   return ""
 }
