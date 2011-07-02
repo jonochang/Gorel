@@ -816,7 +816,3 @@ func (c *ToSql) GetWith(n With) (s string) {
 	return
 }
 
-func (c *ToSql) GetJoin(n Join) (s string) {
-	//TODO change Join to Interface
-	return ""
-}
