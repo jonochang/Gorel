@@ -70,7 +70,7 @@ func (m *SelectManager) InnerJoin(table ast.Node) *SelectManager {
 	js := c.Source.(ast.JoinSource)
 
   r := js.JoinOn
-  r = append(r, ast.InnerJoin{ast.Join{ast.Binary{table, nil}}})
+  r = append(r, ast.InnerJoin{&ast.Binary{table, nil}})
   js.JoinOn = r
 
   c.Source = js
@@ -84,7 +84,7 @@ func (m *SelectManager) OuterJoin(table ast.Node) *SelectManager {
 	js := c.Source.(ast.JoinSource)
 
   r := js.JoinOn
-  r = append(r, ast.OuterJoin{ast.Join{ast.Binary{table, nil}}})
+  r = append(r, ast.OuterJoin{ast.Binary{table, nil}})
   js.JoinOn = r
 
   c.Source = js
@@ -117,6 +117,23 @@ func (m *SelectManager) project(n ast.Node) *SelectManager {
 	c.Projections = append(c.Projections, n)
 	m.Ast.Cores[len(m.Ast.Cores)-1] = c
 	return m
+}
+
+func (m *SelectManager) On(n ast.Node) *SelectManager {
+	//TODO get pointer to SelectCore
+	c := m.Ast.Cores[len(m.Ast.Cores)-1].(ast.SelectCore)
+	js := c.Source.(ast.JoinSource)
+
+  last := js.JoinOn[len(js.JoinOn) - 1]
+  last_join := last.(ast.Join)
+  on := ast.On{ast.Unary{n}}  
+  last_join.SetRight(on)
+
+  js.JoinOn[len(js.JoinOn) - 1] = last_join
+  c.Source = js
+	m.Ast.Cores[len(m.Ast.Cores)-1] = c
+
+  return m
 }
 
 func (m SelectManager) ToSql() string {

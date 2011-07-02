@@ -71,4 +71,5 @@ type Visitor interface {
 	GetSqlLiteral(n SqlLiteral) string
 	GetSelectStatement(n SelectStatement) string
 	GetWith(n With) string
-}
+	GetJoin(n Join) string
+} 

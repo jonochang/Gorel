@@ -492,11 +492,10 @@ func TestGetSubtraction(t *testing.T) {
 func TestGetInnerJoin(t *testing.T) {
 	v := new(ToSql)
 	v.Connection, _ = db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
-	n := new(InnerJoin)
   table := Table{db.TableSchema{Name:"users"}, []Node{}}
-  n.Left = table
-  n.Right = On{Unary{Equality{Binary{Literal{1}, Literal{2}}}}}
-	s := v.GetInnerJoin(*n)
+  on := On{Unary{Equality{Binary{Literal{1}, Literal{2}}}}}
+	n := InnerJoin{&Binary{table, on}}
+	s := v.GetInnerJoin(n)
 	if s != "INNER JOIN `users` ON 1 = 2" {
 		t.Log(s)
 		t.Errorf("failed to get InnerJoin ")
@@ -698,6 +697,12 @@ func TestVisitGetTableAlias(t *testing.T) {
 	table, _ := connection.GetTable("Users")
 	n := Table{table, []Node{}}
 	s := n.GetNameAlias()
+	if s != "Users_0" {
+		t.Log(s)
+		t.Errorf("failed to get table ")
+	}
+	n.CreateTableAlias()
+	s = n.GetNameAlias()
 	if s != "Users_1" {
 		t.Log(s)
 		t.Errorf("failed to get table ")
