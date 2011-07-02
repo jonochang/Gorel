@@ -510,7 +510,7 @@ func TestGetOuterJoin(t *testing.T) {
 	n := OuterJoin{&BaseJoin{table, on}}
 
 	s := v.GetOuterJoin(n)
-	if s != "" {
+	if s != "LEFT OUTER JOIN `users` ON 1 = 2" {
 		t.Log(s)
 		t.Errorf("failed to get OuterJoin ")
 	}
@@ -518,13 +518,10 @@ func TestGetOuterJoin(t *testing.T) {
 
 func TestGetStringJoin(t *testing.T) {
 	v := new(ToSql)
-	v.Connection, _ = db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
-  table := Table{db.TableSchema{Name:"users"}, []Node{}}
-  on := On{Unary{Equality{Binary{&Literal{1}, &Literal{2}}}}}
-	n := StringJoin{&BaseJoin{table, on}}
+	n := StringJoin{"test"}
 
 	s := v.GetStringJoin(n)
-	if s != "" {
+	if s != "test" {
 		t.Log(s)
 		t.Errorf("failed to get StringJoin ")
 	}

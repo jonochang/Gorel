@@ -597,22 +597,12 @@ func (c *ToSql) GetOuterJoin(n OuterJoin) (s string) {
 		rs = n.Right.Visit(c)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("LEFT OUTER JOIN %v %v", ls, rs)
 	return
 }
 
 func (c *ToSql) GetStringJoin(n StringJoin) (s string) {
-	ls := ""
-	if n.Left != nil {
-		ls = n.Left.Visit(c)
-	}
-
-	rs := ""
-	if n.Right != nil {
-		rs = n.Right.Visit(c)
-	}
-
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = n.name
 	return
 }
 

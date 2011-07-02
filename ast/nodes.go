@@ -298,7 +298,7 @@ func (n OuterJoin) Visit(v Visitor) (s string) {
 	return
 }
 
-type StringJoin struct{ *BaseJoin }
+type StringJoin struct{ name string }
 
 func (n StringJoin) Visit(v Visitor) (s string) {
 	s = v.GetStringJoin(n)
