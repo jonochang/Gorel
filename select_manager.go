@@ -72,7 +72,7 @@ func (m *SelectManager) InnerJoin(table ast.Node) *SelectManager {
 	js := c.Source.(ast.JoinSource)
 
   r := js.JoinOn
-  r = append(r, ast.InnerJoin{&ast.Binary{table, nil}})
+  r = append(r, ast.InnerJoin{&ast.BaseJoin{table, nil}})
   js.JoinOn = r
 
   c.Source = js
@@ -86,7 +86,7 @@ func (m *SelectManager) OuterJoin(table ast.Node) *SelectManager {
 	js := c.Source.(ast.JoinSource)
 
   r := js.JoinOn
-  r = append(r, ast.OuterJoin{ast.Binary{table, nil}})
+  r = append(r, ast.OuterJoin{&ast.BaseJoin{table, nil}})
   js.JoinOn = r
 
   c.Source = js

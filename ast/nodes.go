@@ -47,6 +47,11 @@ type Join interface {
   SetRight(n Node)
 }
 
+type BaseJoin struct {
+  Left Node
+  Right Node
+}
+
 type Unary struct {
 	Expression Node
 }
@@ -279,21 +284,21 @@ func (n Subtraction) Visit(v Visitor) (s string) {
 
 
 //-----------------Join----------------
-type InnerJoin struct{ *Binary }
+type InnerJoin struct{ *BaseJoin }
 
 func (n InnerJoin) Visit(v Visitor) (s string) {
 	s = v.GetInnerJoin(n)
 	return
 }
 
-type OuterJoin struct{ Binary }
+type OuterJoin struct{ *BaseJoin }
 
 func (n OuterJoin) Visit(v Visitor) (s string) {
 	s = v.GetOuterJoin(n)
 	return
 }
 
-type StringJoin struct{ Binary }
+type StringJoin struct{ *BaseJoin }
 
 func (n StringJoin) Visit(v Visitor) (s string) {
 	s = v.GetStringJoin(n)
@@ -386,6 +391,10 @@ func (n TableAlias) HasAlias() (bool) {
   return true
 }
 
-func (n *Binary) SetRight(r Node) {
+func (n *BaseJoin) SetRight(r Node) {
   n.Right = r
+}
+
+func (n *BaseJoin) SetLeft(r Node) {
+  n.Left = r
 }

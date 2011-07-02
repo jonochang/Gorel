@@ -494,7 +494,7 @@ func TestGetInnerJoin(t *testing.T) {
 	v.Connection, _ = db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
   table := Table{db.TableSchema{Name:"users"}, []Node{}}
   on := On{Unary{Equality{Binary{&Literal{1}, &Literal{2}}}}}
-	n := InnerJoin{&Binary{table, on}}
+	n := InnerJoin{&BaseJoin{table, on}}
 	s := v.GetInnerJoin(n)
 	if s != "INNER JOIN `users` ON 1 = 2" {
 		t.Log(s)
@@ -504,19 +504,28 @@ func TestGetInnerJoin(t *testing.T) {
 
 func TestGetOuterJoin(t *testing.T) {
 	v := new(ToSql)
-	n := new(OuterJoin)
+	v.Connection, _ = db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+  table := Table{db.TableSchema{Name:"users"}, []Node{}}
+  on := On{Unary{Equality{Binary{&Literal{1}, &Literal{2}}}}}
+	n := OuterJoin{&BaseJoin{table, on}}
 
-	s := v.GetOuterJoin(*n)
+	s := v.GetOuterJoin(n)
 	if s != "" {
+		t.Log(s)
 		t.Errorf("failed to get OuterJoin ")
 	}
 }
+
 func TestGetStringJoin(t *testing.T) {
 	v := new(ToSql)
-	n := new(StringJoin)
+	v.Connection, _ = db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+  table := Table{db.TableSchema{Name:"users"}, []Node{}}
+  on := On{Unary{Equality{Binary{&Literal{1}, &Literal{2}}}}}
+	n := StringJoin{&BaseJoin{table, on}}
 
-	s := v.GetStringJoin(*n)
+	s := v.GetStringJoin(n)
 	if s != "" {
+		t.Log(s)
 		t.Errorf("failed to get StringJoin ")
 	}
 }
