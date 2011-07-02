@@ -8,8 +8,8 @@ type Literal struct {
 	Value interface{}
 }
 
-func (n Literal) Visit(v Visitor) (s string) {
-	s = v.GetLiteral(n)
+func (n *Literal) Visit(v Visitor) (s string) {
+	s = v.GetLiteral(*n)
 	return
 }
 
@@ -36,7 +36,7 @@ func (n Equality) Visit(v Visitor) (s string) {
 
 type Function struct {
 	Expressions []Node
-	Alias       Literal
+	Alias       *Literal
 	Distinct    bool
 }
 

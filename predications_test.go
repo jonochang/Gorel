@@ -23,7 +23,7 @@ func TestPredicationsEq(t *testing.T) {
 
 	table, err := GetTable("Users", connection)
 
-	n := table.Field("id").Eq(ast.Literal{2})
+	n := table.Field("id").Eq(&ast.Literal{2})
 
 	v := ast.ToSql{connection}
 	s := v.GetEquality(n.(ast.Equality))

@@ -89,9 +89,9 @@ func TestGetAnd(t *testing.T) {
 	v := new(ToSql)
 	n := new(And)
 
-	n1 := Literal{1}
-	n2 := Literal{2}
-	n3 := Literal{3}
+	n1 := &Literal{1}
+	n2 := &Literal{2}
+	n3 := &Literal{3}
 	n.Children = []Node{n1, n2, n3}
 
 	s := v.GetAnd(*n)
@@ -105,10 +105,10 @@ func TestGetAnd(t *testing.T) {
 func TestGetBetween(t *testing.T) {
 	v := new(ToSql)
 	n := new(Between)
-	n.Left = Literal{1}
+	n.Left = &Literal{1}
 	n.Right = And{[]Node{
-		Literal{0},
-		Literal{3}}}
+		&Literal{0},
+		&Literal{3}}}
 
 	s := v.GetBetween(*n)
 	if s != "1 BETWEEN 0 AND 3" {
@@ -120,7 +120,7 @@ func TestGetBetween(t *testing.T) {
 func TestGetNotEqual(t *testing.T) {
 	v := new(ToSql)
 	n := new(NotEqual)
-	n.Left = Literal{1}
+	n.Left = &Literal{1}
 
 	s := v.GetNotEqual(*n)
 	if s != "1 IS NOT NULL" {
@@ -128,7 +128,7 @@ func TestGetNotEqual(t *testing.T) {
 		t.Errorf("failed to get NotEqual null right")
 	}
 
-	n.Right = Literal{2}
+	n.Right = &Literal{2}
 	s = v.GetNotEqual(*n)
 	if s != "1 != 2" {
 		t.Log(s)
@@ -150,8 +150,8 @@ func TestGetOr(t *testing.T) {
 	v := new(ToSql)
 	n := new(Or)
 
-	n.Left = Literal{1}
-	n.Right = Literal{2}
+	n.Left = &Literal{1}
+	n.Right = &Literal{2}
 
 	s := v.GetOr(*n)
 	if s != "1 OR 2" {
@@ -174,8 +174,8 @@ func TestGetGreaterThan(t *testing.T) {
 	v := new(ToSql)
 	n := new(GreaterThan)
 
-	n.Left = Literal{1}
-	n.Right = Literal{2}
+	n.Left = &Literal{1}
+	n.Right = &Literal{2}
 
 	s := v.GetGreaterThan(*n)
 	if s != "1 > 2" {
@@ -188,8 +188,8 @@ func TestGetGreaterThanOrEqual(t *testing.T) {
 	v := new(ToSql)
 	n := new(GreaterThanOrEqual)
 
-	n.Left = Literal{2}
-	n.Right = Literal{1}
+	n.Left = &Literal{2}
+	n.Right = &Literal{1}
 
 	s := v.GetGreaterThanOrEqual(*n)
 	if s != "2 >= 1" {
@@ -202,8 +202,8 @@ func TestGetLessThan(t *testing.T) {
 	v := new(ToSql)
 	n := new(LessThan)
 
-	n.Left = Literal{1}
-	n.Right = Literal{2}
+	n.Left = &Literal{1}
+	n.Right = &Literal{2}
 
 	s := v.GetLessThan(*n)
 	if s != "1 < 2" {
@@ -216,8 +216,8 @@ func TestGetLessThanOrEqual(t *testing.T) {
 	v := new(ToSql)
 	n := new(LessThanOrEqual)
 
-	n.Left = Literal{2}
-	n.Right = Literal{1}
+	n.Left = &Literal{2}
+	n.Right = &Literal{1}
 
 	s := v.GetLessThanOrEqual(*n)
 	if s != "2 <= 1" {
@@ -230,8 +230,8 @@ func TestGetMatches(t *testing.T) {
 	v := new(ToSql)
 	n := new(Matches)
 
-	n.Left = Literal{2}
-	n.Right = Literal{1}
+	n.Left = &Literal{2}
+	n.Right = &Literal{1}
 
 	s := v.GetMatches(*n)
 	if s != "2 LIKE 1" {
@@ -244,8 +244,8 @@ func TestGetDoesNotMatch(t *testing.T) {
 	v := new(ToSql)
 	n := new(DoesNotMatch)
 
-	n.Left = Literal{2}
-	n.Right = Literal{1}
+	n.Left = &Literal{2}
+	n.Right = &Literal{1}
 
 	s := v.GetDoesNotMatch(*n)
 	if s != "2 NOT LIKE 1" {
@@ -258,8 +258,8 @@ func TestGetNotIn(t *testing.T) {
 	v := new(ToSql)
 	n := new(NotIn)
 
-	n.Left = Literal{"abc"}
-	n.Right = Literal{[]string{"1", "2", "3", "4"}}
+	n.Left = &Literal{"abc"}
+	n.Right = &Literal{[]string{"1", "2", "3", "4"}}
 	s := v.GetNotIn(*n)
 	if s != "\"abc\" NOT IN (\"1\",\"2\",\"3\",\"4\")" {
 		t.Log(s)
@@ -351,8 +351,8 @@ func TestGetEquality(t *testing.T) {
 	v := new(ToSql)
 	n := new(Equality)
 
-	n.Left = Literal{1}
-	n.Right = Literal{2}
+	n.Left = &Literal{1}
+	n.Right = &Literal{2}
 
 	s := v.GetEquality(*n)
 	if s != "1 = 2" {
@@ -365,8 +365,8 @@ func TestGetIn(t *testing.T) {
 	v := new(ToSql)
 	n := new(In)
 
-	n.Left = Literal{"abc"}
-	n.Right = Literal{[]string{"1", "2", "3", "4"}}
+	n.Left = &Literal{"abc"}
+	n.Right = &Literal{[]string{"1", "2", "3", "4"}}
 
 	s := v.GetIn(*n)
 	if s != "\"abc\" IN (\"1\",\"2\",\"3\",\"4\")" {
@@ -436,8 +436,8 @@ func TestGetMultiplication(t *testing.T) {
 	v := new(ToSql)
 	n := new(Multiplication)
 
-	n.Left = Literal{1}
-	n.Right = Literal{2}
+	n.Left = &Literal{1}
+	n.Right = &Literal{2}
 
 	s := v.GetMultiplication(*n)
 	if s != "1 * 2" {
@@ -450,8 +450,8 @@ func TestGetDivision(t *testing.T) {
 	v := new(ToSql)
 	n := new(Division)
 
-	n.Left = Literal{1}
-	n.Right = Literal{2}
+	n.Left = &Literal{1}
+	n.Right = &Literal{2}
 
 	s := v.GetDivision(*n)
 	if s != "1 / 2" {
@@ -464,8 +464,8 @@ func TestGetAddition(t *testing.T) {
 	v := new(ToSql)
 	n := new(Addition)
 
-	n.Left = Literal{1}
-	n.Right = Literal{2}
+	n.Left = &Literal{1}
+	n.Right = &Literal{2}
 
 	s := v.GetAddition(*n)
 	if s != "1 + 2" {
@@ -478,8 +478,8 @@ func TestGetSubtraction(t *testing.T) {
 	v := new(ToSql)
 	n := new(Subtraction)
 
-	n.Left = Literal{1}
-	n.Right = Literal{2}
+	n.Left = &Literal{1}
+	n.Right = &Literal{2}
 
 	s := v.GetSubtraction(*n)
 	if s != "1 - 2" {
@@ -493,7 +493,7 @@ func TestGetInnerJoin(t *testing.T) {
 	v := new(ToSql)
 	v.Connection, _ = db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
   table := Table{db.TableSchema{Name:"users"}, []Node{}}
-  on := On{Unary{Equality{Binary{Literal{1}, Literal{2}}}}}
+  on := On{Unary{Equality{Binary{&Literal{1}, &Literal{2}}}}}
 	n := InnerJoin{&Binary{table, on}}
 	s := v.GetInnerJoin(n)
 	if s != "INNER JOIN `users` ON 1 = 2" {
@@ -526,7 +526,7 @@ func TestGetNot(t *testing.T) {
 	v := new(ToSql)
 	n := new(Not)
 
-	n.Expression = Equality{Binary{Literal{1}, Literal{2}}}
+	n.Expression = Equality{Binary{&Literal{1}, &Literal{2}}}
 
 	s := v.GetNot(*n)
 	if s != "NOT (1 = 2)" {
@@ -549,7 +549,7 @@ func TestGetOffset(t *testing.T) {
 	v := new(ToSql)
 	n := new(Offset)
 
-	n.Expression = Literal{10}
+	n.Expression = &Literal{10}
 
 	s := v.GetOffset(*n)
 	if s != "OFFSET 10" {
@@ -562,7 +562,7 @@ func TestGetLimit(t *testing.T) {
 	v := new(ToSql)
 	n := new(Limit)
 
-	n.Expression = Literal{100}
+	n.Expression = &Literal{100}
 
 	s := v.GetLimit(*n)
 	if s != "LIMIT 100" {
@@ -585,7 +585,7 @@ func TestGetHaving(t *testing.T) {
 	v := new(ToSql)
 	n := new(Having)
 
-	n.Expression = Equality{Binary{Literal{1}, Literal{2}}}
+	n.Expression = Equality{Binary{&Literal{1}, &Literal{2}}}
 
 	s := v.GetHaving(*n)
 	if s != "HAVING (1 = 2)" {
@@ -616,8 +616,8 @@ func TestGetGroup(t *testing.T) {
 func TestGetGrouping(t *testing.T) {
 	v := new(ToSql)
 	n := new(Grouping)
-	eq1 := Equality{Binary{Literal{1}, Literal{2}}}
-	eq2 := Equality{Binary{Literal{3}, Literal{4}}}
+	eq1 := Equality{Binary{&Literal{1}, &Literal{2}}}
+	eq2 := Equality{Binary{&Literal{3}, &Literal{4}}}
 	and := And{[]Node{eq1, eq2}}
 	n.Expression = and
 	s := v.GetGrouping(*n)
@@ -631,7 +631,7 @@ func TestGetOn(t *testing.T) {
 	v := new(ToSql)
 	n := new(On)
 
-	n.Expression = Equality{Binary{Literal{1}, Literal{2}}}
+	n.Expression = Equality{Binary{&Literal{1}, &Literal{2}}}
 
 	s := v.GetOn(*n)
 	if s != "ON 1 = 2" {
@@ -668,7 +668,7 @@ func TestGetSelectCore(t *testing.T) {
 
 	n.Projections = []Node{SqlLiteral{"*"}}
 	n.Source = JoinSource{table_alias, make([]Node, 0)}
-	n.Wheres = []Node{f.Eq(Literal{1})}
+	n.Wheres = []Node{f.Eq(&Literal{1})}
 
 	v := ToSql{connection}
 	s := v.GetSelectCore(*n)
@@ -749,12 +749,12 @@ func TestVisitGetSelectStatement(t *testing.T) {
 	c := n.Cores[len(n.Cores)-1].(SelectCore)
 	c.Projections = []Node{SqlLiteral{"*"}}
 	c.Source = JoinSource{table_alias, make([]Node, 0)}
-	c.Wheres = []Node{f.Eq(Literal{1})}
+	c.Wheres = []Node{f.Eq(&Literal{1})}
 
 	n.Cores[len(n.Cores)-1] = c
 	n.Orders = append(n.Orders, f)
-	n.Limit = Limit{Unary{Literal{1}}}
-	n.Offset = Offset{Unary{Literal{1}}}
+	n.Limit = Limit{Unary{&Literal{1}}}
+	n.Offset = Offset{Unary{&Literal{1}}}
 	v := ToSql{connection}
 	s := v.GetSelectStatement(n)
 	if s != "SELECT * FROM `Users` `u`  WHERE `u`.`id` = 1 ORDER BY `u`.`id` LIMIT 1 OFFSET 1" {
