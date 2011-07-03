@@ -31,7 +31,7 @@ func (n Table) HasAlias() bool {
 
 func (n *Table) CreateTableAlias() (ta TableAlias) {
 	ta.Left = n
-	ta.Right = SqlLiteral{n.GetNameAlias()}
+	ta.Right = NewSqlLiteral(n.GetNameAlias())
 	n.Aliases = append(n.Aliases, ta)
 	return ta
 }

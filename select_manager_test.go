@@ -15,7 +15,7 @@ func TestSelectManagerAs(t *testing.T) {
 
 	table, err := GetTable("Users", connection)
 	m1 := NewSelectManagerFromTable(-1, connection, table.Table)
-	n := m1.Project(ast.SqlLiteral{"*"}).As("t")
+	n := m1.Project(ast.NewSqlLiteral("*")).As("t")
 
 	m2 := NewSelectManager(-1, connection)
 	m2.From(n).Project("*")
@@ -82,7 +82,7 @@ func TestSelectManagerOrder(t *testing.T) {
 		t.Errorf("Failed to get Order On for select manager")
 	}
 
-	m2.Order([]ast.Node{table.Field("id"), ast.SqlLiteral{"login"}}...)
+	m2.Order([]ast.Node{table.Field("id"), ast.NewSqlLiteral("login")}...)
 	s = m2.ToSql()
 	if s != "SELECT FROM `Users`  ORDER BY `Users`.`id`, login" {
 		t.Log(s)
@@ -155,7 +155,7 @@ func TestSelectManagerGroup(t *testing.T) {
 		t.Errorf("Failed to get Order On for select manager")
 	}
 
-	m2.Group([]ast.Node{table.Field("id"), ast.SqlLiteral{"login"}}...)
+	m2.Group([]ast.Node{table.Field("id"), ast.NewSqlLiteral("login")}...)
 	s = m2.ToSql()
 	if s != "SELECT FROM `Users`  GROUP BY `Users`.`id`, login" {
 		t.Log(s)

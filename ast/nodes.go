@@ -36,7 +36,7 @@ func (n Equality) Visit(v Visitor) (s string) {
 
 type Function struct {
 	Expressions []Node
-	Alias       *Literal
+	Alias       *SqlLiteral
 	Distinct    bool
 }
 
@@ -210,9 +210,9 @@ func (n In) Visit(v Visitor) (s string) {
 
 
 //-----------------Function----------------
-type Count struct{ Function }
+type CountNode struct{ Function }
 
-func (n Count) Visit(v Visitor) (s string) {
+func (n CountNode) Visit(v Visitor) (s string) {
 	s = v.GetCount(n)
 	return
 }

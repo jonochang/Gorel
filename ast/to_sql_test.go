@@ -299,7 +299,7 @@ func TestGetTableAlias(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema, []Node{}}
-	n := TableAlias{Binary{table, SqlLiteral{"u"}}}
+	n := TableAlias{Binary{table, NewSqlLiteral("u")}}
 
 	v := ToSql{connection}
 	s := v.GetTableAlias(n)
@@ -378,13 +378,43 @@ func TestGetIn(t *testing.T) {
 //-----------------Function----------------
 func TestGetCount(t *testing.T) {
 	v := new(ToSql)
-	n := new(Count)
 
-	s := v.GetCount(*n)
-	if s != "" {
+	n := NewSqlLiteral("*").Count()
+	s := v.GetCount(n)
+	if s != "COUNT(*) AS Count_id" {
+		t.Log(s)
+		t.Errorf("failed to get Count *")
+	}
+
+	n = NewSqlLiteral("*").CountDistinct()
+	s = v.GetCount(n)
+	if s != "COUNT(DISTINCT *) AS Count_id" {
+		t.Log(s)
+		t.Errorf("failed to get Count Distinct *")
+	}
+
+	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+	v.Connection = connection
+	tableSchema, _ := v.Connection.GetTable("Users")
+	table := Table{tableSchema, []Node{}}
+	table_alias := TableAlias{Binary{table, NewSqlLiteral("u")}}
+	f := NewField(table_alias, table.ColumnMap["id"])
+
+	n = f.Count()
+	s = v.GetCount(n)
+	if s != "COUNT(`u`.`id`) AS Count_id" {
+		t.Log(s)
+		t.Errorf("failed to get Count ")
+	}
+
+	n = f.CountDistinct()
+	s = v.GetCount(n)
+	if s != "COUNT(DISTINCT `u`.`id`) AS Count_id" {
+		t.Log(s)
 		t.Errorf("failed to get Count ")
 	}
 }
+
 func TestGetSum(t *testing.T) {
 	v := new(ToSql)
 	n := new(Sum)
@@ -612,7 +642,7 @@ func TestGetUnqualifiedColumn(t *testing.T) {
 
 func TestGetGroup(t *testing.T) {
 	v := new(ToSql)
-	n := Group{Unary{SqlLiteral{"test"}}}
+	n := Group{Unary{NewSqlLiteral("test")}}
 
 	s := v.GetGroup(n)
 	if s != "test" {
@@ -655,7 +685,7 @@ func TestGetField(t *testing.T) {
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema, []Node{}}
 
-	n := Field{table, table.ColumnMap["id"]}
+	n := NewField(table, table.ColumnMap["id"])
 	v := ToSql{connection}
 
 	s := v.GetField(n)
@@ -671,10 +701,10 @@ func TestGetSelectCore(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema, []Node{}}
-	table_alias := TableAlias{Binary{table, SqlLiteral{"u"}}}
-	f := Field{table_alias, table.ColumnMap["id"]}
+	table_alias := TableAlias{Binary{table, NewSqlLiteral("u")}}
+	f := NewField(table_alias, table.ColumnMap["id"])
 
-	n.Projections = []Node{SqlLiteral{"*"}}
+	n.Projections = []Node{NewSqlLiteral("*")}
 	n.Source = JoinSource{table_alias, make([]Node, 0)}
 	n.Wheres = []Node{f.Eq(&Literal{1})}
 
@@ -721,7 +751,7 @@ func TestVisitGetJoinSource(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema, []Node{}}
-	table_alias := TableAlias{Binary{table, SqlLiteral{"u"}}}
+	table_alias := TableAlias{Binary{table, NewSqlLiteral("u")}}
 
 	n := JoinSource{table_alias, make([]Node, 0)}
 	v := ToSql{connection}
@@ -734,7 +764,7 @@ func TestVisitGetJoinSource(t *testing.T) {
 
 func TestVisitGetSqlLiteral(t *testing.T) {
 	v := new(ToSql)
-	n := SqlLiteral{"test"}
+	n := NewSqlLiteral("test")
 	s := v.GetSqlLiteral(n)
 	if s != "test" {
 		t.Log(s)
@@ -746,8 +776,8 @@ func TestVisitGetSelectStatement(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema, []Node{}}
-	table_alias := TableAlias{Binary{table, SqlLiteral{"u"}}}
-	f := Field{table_alias, table.ColumnMap["id"]}
+	table_alias := TableAlias{Binary{table, NewSqlLiteral("u")}}
+	f := NewField(table_alias, table.ColumnMap["id"])
 
 	n := NewSelectStatement()
 	if len(n.Cores) == 0 {
@@ -755,7 +785,7 @@ func TestVisitGetSelectStatement(t *testing.T) {
 	}
 
 	c := n.Cores[len(n.Cores)-1].(*SelectCore)
-	c.Projections = []Node{SqlLiteral{"*"}}
+	c.Projections = []Node{NewSqlLiteral("*")}
 	c.Source = JoinSource{table_alias, make([]Node, 0)}
 	c.Wheres = []Node{f.Eq(&Literal{1})}
 

@@ -433,16 +433,20 @@ func (c *ToSql) GetIn(n In) (s string) {
 
 
 //-----------------Function----------------
-func (c *ToSql) GetCount(n Count) (s string) {
+func (c *ToSql) GetCount(n CountNode) (s string) {
 	expressions := c.VisitNodesString(n.Expressions, ", ")
 
 	alias := ""
 	if n.Alias != nil {
-		alias = n.Alias.Visit(c)
+		alias = fmt.Sprintf("AS %v", n.Alias.Visit(c))
 	}
 
-	distinct := n.Distinct
-	s = fmt.Sprintf("%v * %v * %v", expressions, alias, distinct)
+	distinct := ""
+	if n.Distinct {
+		distinct = "DISTINCT "
+	}
+
+	s = fmt.Sprintf("COUNT(%v%v) %v", distinct, expressions, alias)
 	return s
 
 }

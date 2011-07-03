@@ -33,7 +33,7 @@ type Visitor interface {
 	GetIn(n In) string
 
 	//-----------------Function----------------
-	GetCount(n Count) string
+	GetCount(n CountNode) string
 	GetSum(n Sum) string
 	GetExists(n Exists) string
 	GetMax(n Max) string
