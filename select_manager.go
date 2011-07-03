@@ -42,7 +42,7 @@ func NewSelectManagerFromTable(adapter db.Adapter, connection db.Connection, tab
 func (m SelectManager) As(alias string) (n ast.Node) {
 	grouping := ast.Grouping{ast.Unary{m.Ast}}
 	l := ast.NewSqlLiteral(alias)
-	n = ast.TableAlias{ast.Binary{grouping, l}}
+	n = ast.NewTableAliasByNode(grouping, nil, &l)
 	return
 }
 

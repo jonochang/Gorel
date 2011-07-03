@@ -30,12 +30,16 @@ func (n Table) HasAlias() bool {
 }
 
 func (n *Table) CreateTableAlias() (ta TableAlias) {
-	ta.Left = n
-	ta.Right = NewSqlLiteral(n.GetNameAlias())
+	l := NewSqlLiteral(n.GetNameAlias())
+	ta = NewTableAlias(n, &l)
 	n.Aliases = append(n.Aliases, ta)
 	return ta
 }
 
 func (n Table) CurrentTableAlias() TableAlias {
 	return n.Aliases[len(n.Aliases)-1].(TableAlias)
+}
+
+func (n Table) GetField(id string) Field {
+	return NewField(n, n.ColumnMap[id])
 }

@@ -338,8 +338,8 @@ func (c *ToSql) GetTableAlias(n TableAlias) (s string) {
 	}
 
 	rs := ""
-	if n.Right != nil {
-		source := n.Right.Visit(c)
+	if n.Alias != nil {
+		source := n.Alias.Visit(c)
 		rs = c.Connection.QuoteTableName(source)
 	}
 

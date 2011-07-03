@@ -299,7 +299,7 @@ func TestGetTableAlias(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema, []Node{}}
-	n := TableAlias{Binary{table, NewSqlLiteral("u")}}
+	n := NewTableAlias(&table, NewSqlLiteralPointer("u"))
 
 	v := ToSql{connection}
 	s := v.GetTableAlias(n)
@@ -397,8 +397,8 @@ func TestGetCount(t *testing.T) {
 	v.Connection = connection
 	tableSchema, _ := v.Connection.GetTable("Users")
 	table := Table{tableSchema, []Node{}}
-	table_alias := TableAlias{Binary{table, NewSqlLiteral("u")}}
-	f := NewField(table_alias, table.ColumnMap["id"])
+	table_alias := NewTableAlias(&table, NewSqlLiteralPointer("u"))
+	f := table_alias.GetField("id")
 
 	n = f.Count()
 	s = v.GetCount(n)
@@ -684,8 +684,8 @@ func TestGetField(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema, []Node{}}
+	n := table.GetField("id")
 
-	n := NewField(table, table.ColumnMap["id"])
 	v := ToSql{connection}
 
 	s := v.GetField(n)
@@ -701,8 +701,8 @@ func TestGetSelectCore(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema, []Node{}}
-	table_alias := TableAlias{Binary{table, NewSqlLiteral("u")}}
-	f := NewField(table_alias, table.ColumnMap["id"])
+	table_alias := NewTableAlias(&table, NewSqlLiteralPointer("u"))
+	f := table_alias.GetField("id")
 
 	n.Projections = []Node{NewSqlLiteral("*")}
 	n.Source = JoinSource{table_alias, make([]Node, 0)}
@@ -751,7 +751,7 @@ func TestVisitGetJoinSource(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema, []Node{}}
-	table_alias := TableAlias{Binary{table, NewSqlLiteral("u")}}
+	table_alias := NewTableAlias(&table, NewSqlLiteralPointer("u"))
 
 	n := JoinSource{table_alias, make([]Node, 0)}
 	v := ToSql{connection}
@@ -776,8 +776,8 @@ func TestVisitGetSelectStatement(t *testing.T) {
 	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 	tableSchema, _ := connection.GetTable("Users")
 	table := Table{tableSchema, []Node{}}
-	table_alias := TableAlias{Binary{table, NewSqlLiteral("u")}}
-	f := NewField(table_alias, table.ColumnMap["id"])
+	table_alias := NewTableAlias(&table, NewSqlLiteralPointer("u"))
+	f := table_alias.GetField("id")
 
 	n := NewSelectStatement()
 	if len(n.Cores) == 0 {

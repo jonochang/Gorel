@@ -164,13 +164,6 @@ func (n DeleteStatement) Visit(v Visitor) (s string) {
 	return
 }
 
-type TableAlias struct{ Binary }
-
-func (n TableAlias) Visit(v Visitor) (s string) {
-	s = v.GetTableAlias(n)
-	return
-}
-
 type Except struct{ Binary }
 
 func (n Except) Visit(v Visitor) (s string) {
@@ -379,18 +372,6 @@ func (n On) Visit(v Visitor) (s string) {
 
 
 // ------- NOT GENERATED -----------
-func (n TableAlias) GetNameAlias() (s string) {
-	return n.Right.(SqlLiteral).Value
-}
-
-func (n TableAlias) GetName() (s string) {
-	return n.Left.(Table).Name
-}
-
-func (n TableAlias) HasAlias() bool {
-	return true
-}
-
 func (n *BaseJoin) SetRight(r Node) {
 	n.Right = r
 }

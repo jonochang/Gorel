@@ -14,6 +14,11 @@ func NewSqlLiteral(value string) SqlLiteral {
 	return SqlLiteral{value, &ExpressionFunctions{}}
 }
 
+func NewSqlLiteralPointer(value string) *SqlLiteral {
+	l := NewSqlLiteral(value)
+	return &l
+}
+
 func (s SqlLiteral) Count() CountNode { return s.count(s, false) }
 
 func (s SqlLiteral) CountDistinct() CountNode { return s.count(s, true) }
