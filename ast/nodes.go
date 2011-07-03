@@ -34,12 +34,6 @@ func (n Equality) Visit(v Visitor) (s string) {
 	return
 }
 
-type Function struct {
-	Expressions []Node
-	Alias       *SqlLiteral
-	Distinct    bool
-}
-
 type InfixOperation struct{ Binary }
 
 type Join interface {
@@ -198,50 +192,6 @@ type In struct{ Equality }
 
 func (n In) Visit(v Visitor) (s string) {
 	s = v.GetIn(n)
-	return
-}
-
-
-//-----------------Function----------------
-type CountNode struct{ Function }
-
-func (n CountNode) Visit(v Visitor) (s string) {
-	s = v.GetCount(n)
-	return
-}
-
-type SumNode struct{ Function }
-
-func (n SumNode) Visit(v Visitor) (s string) {
-	s = v.GetSum(n)
-	return
-}
-
-type Exists struct{ Function }
-
-func (n Exists) Visit(v Visitor) (s string) {
-	s = v.GetExists(n)
-	return
-}
-
-type Max struct{ Function }
-
-func (n Max) Visit(v Visitor) (s string) {
-	s = v.GetMax(n)
-	return
-}
-
-type Min struct{ Function }
-
-func (n Min) Visit(v Visitor) (s string) {
-	s = v.GetMin(n)
-	return
-}
-
-type Avg struct{ Function }
-
-func (n Avg) Visit(v Visitor) (s string) {
-	s = v.GetAvg(n)
 	return
 }
 

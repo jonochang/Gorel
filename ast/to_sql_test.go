@@ -404,14 +404,21 @@ func TestGetCount(t *testing.T) {
 	s = v.GetCount(n)
 	if s != "COUNT(`u`.`id`) AS Count_id" {
 		t.Log(s)
-		t.Errorf("failed to get Count ")
+		t.Errorf("failed to get Count field")
 	}
 
 	n = f.CountDistinct()
 	s = v.GetCount(n)
 	if s != "COUNT(DISTINCT `u`.`id`) AS Count_id" {
 		t.Log(s)
-		t.Errorf("failed to get Count ")
+		t.Errorf("failed to get Count field distinct")
+	}
+
+	n = f.CountDistinct().As("foo")
+	s = v.GetCount(n)
+	if s != "COUNT(DISTINCT `u`.`id`) AS foo" {
+		t.Log(s)
+		t.Errorf("failed to get Count field as")
 	}
 }
 
@@ -429,6 +436,13 @@ func TestGetSum(t *testing.T) {
 	if s != "SUM(`u`.`id`) AS Sum_id" {
 		t.Log(s)
 		t.Errorf("failed to get SUM ")
+	}
+
+	n = f.Sum().As("foo")
+	s = v.GetSum(n)
+	if s != "SUM(`u`.`id`) AS foo" {
+		t.Log(s)
+		t.Errorf("failed to get SUM as foo ")
 	}
 }
 
