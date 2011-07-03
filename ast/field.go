@@ -22,3 +22,5 @@ func NewField(table TableNameAlias, column db.ColumnSchema) Field {
 func (f Field) Count() CountNode { return f.count(f, false) }
 
 func (f Field) CountDistinct() CountNode { return f.count(f, true) }
+
+func (f Field) Sum() SumNode { return f.sum(f) }

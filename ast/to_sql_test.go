@@ -417,13 +417,21 @@ func TestGetCount(t *testing.T) {
 
 func TestGetSum(t *testing.T) {
 	v := new(ToSql)
-	n := new(Sum)
+	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+	v.Connection = connection
+	tableSchema, _ := v.Connection.GetTable("Users")
+	table := Table{tableSchema, []Node{}}
+	table_alias := NewTableAlias(&table, NewSqlLiteralPointer("u"))
+	f := table_alias.GetField("id")
 
-	s := v.GetSum(*n)
-	if s != "" {
-		t.Errorf("failed to get Sum ")
+	n := f.Sum()
+	s := v.GetSum(n)
+	if s != "SUM(`u`.`id`) AS Sum_id" {
+		t.Log(s)
+		t.Errorf("failed to get SUM ")
 	}
 }
+
 func TestGetExists(t *testing.T) {
 	v := new(ToSql)
 	n := new(Exists)

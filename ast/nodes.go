@@ -210,9 +210,9 @@ func (n CountNode) Visit(v Visitor) (s string) {
 	return
 }
 
-type Sum struct{ Function }
+type SumNode struct{ Function }
 
-func (n Sum) Visit(v Visitor) (s string) {
+func (n SumNode) Visit(v Visitor) (s string) {
 	s = v.GetSum(n)
 	return
 }

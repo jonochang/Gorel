@@ -451,16 +451,14 @@ func (c *ToSql) GetCount(n CountNode) (s string) {
 
 }
 
-func (c *ToSql) GetSum(n Sum) (s string) {
+func (c *ToSql) GetSum(n SumNode) (s string) {
 	expressions := c.VisitNodesString(n.Expressions, ", ")
 	alias := ""
 	if n.Alias != nil {
-		alias = n.Alias.Visit(c)
+		alias = fmt.Sprintf("AS %v", n.Alias.Visit(c))
 	}
-	distinct := n.Distinct
-	s = fmt.Sprintf("%v * %v * %v", expressions, alias, distinct)
+	s = fmt.Sprintf("SUM(%v) %v", expressions, alias)
 	return s
-
 }
 
 func (c *ToSql) GetExists(n Exists) (s string) {

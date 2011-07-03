@@ -34,7 +34,7 @@ type Visitor interface {
 
 	//-----------------Function----------------
 	GetCount(n CountNode) string
-	GetSum(n Sum) string
+	GetSum(n SumNode) string
 	GetExists(n Exists) string
 	GetMax(n Max) string
 	GetMin(n Min) string
