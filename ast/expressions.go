@@ -11,3 +11,8 @@ func (e *ExpressionFunctions) sum(self Node) SumNode {
 	alias := NewSqlLiteral("Sum_id")
 	return SumNode{Function{[]Node{self}, &alias, false}}
 }
+
+func (e *ExpressionFunctions) max(self Node) MaxNode {
+	alias := NewSqlLiteral("Max_id")
+	return MaxNode{Function{[]Node{self}, &alias, false}}
+}

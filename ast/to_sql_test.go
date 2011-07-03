@@ -455,15 +455,31 @@ func TestGetExists(t *testing.T) {
 		t.Errorf("failed to get Exists ")
 	}
 }
+
 func TestGetMax(t *testing.T) {
 	v := new(ToSql)
-	n := new(Max)
+	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+	v.Connection = connection
+	tableSchema, _ := v.Connection.GetTable("Users")
+	table := Table{tableSchema, []Node{}}
+	table_alias := NewTableAlias(&table, NewSqlLiteralPointer("u"))
+	f := table_alias.GetField("id")
 
-	s := v.GetMax(*n)
-	if s != "" {
-		t.Errorf("failed to get Max ")
+	n := f.Max()
+	s := v.GetMax(n)
+	if s != "MAX(`u`.`id`) AS Max_id" {
+		t.Log(s)
+		t.Errorf("failed to get MAX ")
+	}
+
+	n = f.Max().As("foo")
+	s = v.GetMax(n)
+	if s != "MAX(`u`.`id`) AS foo" {
+		t.Log(s)
+		t.Errorf("failed to get MAX as foo ")
 	}
 }
+
 func TestGetMin(t *testing.T) {
 	v := new(ToSql)
 	n := new(Min)

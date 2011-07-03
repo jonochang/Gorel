@@ -36,7 +36,7 @@ type Visitor interface {
 	GetCount(n CountNode) string
 	GetSum(n SumNode) string
 	GetExists(n Exists) string
-	GetMax(n Max) string
+	GetMax(n MaxNode) string
 	GetMin(n Min) string
 	GetAvg(n Avg) string
 

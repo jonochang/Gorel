@@ -29,9 +29,9 @@ func (n Exists) Visit(v Visitor) (s string) {
 	return
 }
 
-type Max struct{ Function }
+type MaxNode struct{ Function }
 
-func (n Max) Visit(v Visitor) (s string) {
+func (n MaxNode) Visit(v Visitor) (s string) {
 	s = v.GetMax(n)
 	return
 }
@@ -59,3 +59,4 @@ func (function *Function) as(literal string) *Function {
 
 func (n CountNode) As(literal string) CountNode { n.as(literal); return n }
 func (n SumNode) As(literal string) SumNode     { n.as(literal); return n }
+func (n MaxNode) As(literal string) MaxNode     { n.as(literal); return n }
