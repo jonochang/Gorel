@@ -483,14 +483,13 @@ func (c *ToSql) GetMax(n MaxNode) (s string) {
 	return s
 }
 
-func (c *ToSql) GetMin(n Min) (s string) {
+func (c *ToSql) GetMin(n MinNode) (s string) {
 	expressions := c.VisitNodesString(n.Expressions, ", ")
 	alias := ""
 	if n.Alias != nil {
-		alias = n.Alias.Visit(c)
+		alias = fmt.Sprintf("AS %v", n.Alias.Visit(c))
 	}
-	distinct := n.Distinct
-	s = fmt.Sprintf("%v * %v * %v", expressions, alias, distinct)
+	s = fmt.Sprintf("MIN(%v) %v", expressions, alias)
 	return s
 
 }

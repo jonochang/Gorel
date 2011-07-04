@@ -482,13 +482,28 @@ func TestGetMax(t *testing.T) {
 
 func TestGetMin(t *testing.T) {
 	v := new(ToSql)
-	n := new(Min)
+	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+	v.Connection = connection
+	tableSchema, _ := v.Connection.GetTable("Users")
+	table := Table{tableSchema, []Node{}}
+	table_alias := NewTableAlias(&table, NewSqlLiteralPointer("u"))
+	f := table_alias.GetField("id")
 
-	s := v.GetMin(*n)
-	if s != "" {
+	n := f.Min()
+	s := v.GetMin(n)
+	if s != "MIN(`u`.`id`) AS Min_id" {
+		t.Log(s)
 		t.Errorf("failed to get Min ")
 	}
+
+	n = f.Min().As("foo")
+	s = v.GetMin(n)
+	if s != "MIN(`u`.`id`) AS foo" {
+		t.Log(s)
+		t.Errorf("failed to get Min as foo ")
+	}
 }
+
 func TestGetAvg(t *testing.T) {
 	v := new(ToSql)
 	n := new(Avg)

@@ -26,3 +26,5 @@ func (f Field) CountDistinct() CountNode { return f.count(f, true) }
 func (f Field) Sum() SumNode { return f.sum(f) }
 
 func (f Field) Max() MaxNode { return f.max(f) }
+
+func (f Field) Min() MinNode { return f.min(f) }

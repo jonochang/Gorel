@@ -16,3 +16,8 @@ func (e *ExpressionFunctions) max(self Node) MaxNode {
 	alias := NewSqlLiteral("Max_id")
 	return MaxNode{Function{[]Node{self}, &alias, false}}
 }
+
+func (e *ExpressionFunctions) min(self Node) MinNode {
+	alias := NewSqlLiteral("Min_id")
+	return MinNode{Function{[]Node{self}, &alias, false}}
+}

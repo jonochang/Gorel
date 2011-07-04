@@ -36,9 +36,9 @@ func (n MaxNode) Visit(v Visitor) (s string) {
 	return
 }
 
-type Min struct{ Function }
+type MinNode struct{ Function }
 
-func (n Min) Visit(v Visitor) (s string) {
+func (n MinNode) Visit(v Visitor) (s string) {
 	s = v.GetMin(n)
 	return
 }
@@ -60,3 +60,4 @@ func (function *Function) as(literal string) *Function {
 func (n CountNode) As(literal string) CountNode { n.as(literal); return n }
 func (n SumNode) As(literal string) SumNode     { n.as(literal); return n }
 func (n MaxNode) As(literal string) MaxNode     { n.as(literal); return n }
+func (n MinNode) As(literal string) MinNode     { n.as(literal); return n }
