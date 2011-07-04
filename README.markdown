@@ -10,7 +10,7 @@ I found it quite useful, and I thought it may be useful for people working in Go
 
 ## STATUS
 I've got some good support for SELECT, and should be able to add the rest fairly soon. It also only
-supports [MySQL](github.com/Philio/GoMySQL) at the moment, but adding Postgresql and others should be
+supports [MySQL](http://github.com/Philio/GoMySQL) at the moment, but adding Postgresql and others should be
 fairly easy. If you'd like to use it, install gb, run the tests and have a look at them for syntax.
 
 There's a few failing tests: I'm working on those at the momemnt.
