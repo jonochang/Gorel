@@ -38,7 +38,7 @@ type Visitor interface {
 	GetExists(n Exists) string
 	GetMax(n MaxNode) string
 	GetMin(n MinNode) string
-	GetAvg(n Avg) string
+	GetAvg(n AvgNode) string
 
 	//-----------------InfixOperation----------------
 	GetMultiplication(n Multiplication) string

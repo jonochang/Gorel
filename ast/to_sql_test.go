@@ -506,12 +506,27 @@ func TestGetMin(t *testing.T) {
 
 func TestGetAvg(t *testing.T) {
 	v := new(ToSql)
-	n := new(Avg)
+	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+	v.Connection = connection
+	tableSchema, _ := v.Connection.GetTable("Users")
+	table := Table{tableSchema, []Node{}}
+	table_alias := NewTableAlias(&table, NewSqlLiteralPointer("u"))
+	f := table_alias.GetField("id")
 
-	s := v.GetAvg(*n)
-	if s != "" {
+	n := f.Avg()
+	s := v.GetAvg(n)
+	if s != "AVG(`u`.`id`) AS Avg_id" {
+		t.Log(s)
 		t.Errorf("failed to get Avg ")
 	}
+
+	n = f.Avg().As("foo")
+	s = v.GetAvg(n)
+	if s != "AVG(`u`.`id`) AS foo" {
+		t.Log(s)
+		t.Errorf("failed to get Avg as foo ")
+	}
+
 }
 
 //-----------------InfixOperation----------------

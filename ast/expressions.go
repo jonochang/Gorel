@@ -21,3 +21,8 @@ func (e *ExpressionFunctions) min(self Node) MinNode {
 	alias := NewSqlLiteral("Min_id")
 	return MinNode{Function{[]Node{self}, &alias, false}}
 }
+
+func (e *ExpressionFunctions) avg(self Node) AvgNode {
+	alias := NewSqlLiteral("Avg_id")
+	return AvgNode{Function{[]Node{self}, &alias, false}}
+}

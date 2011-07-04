@@ -28,3 +28,5 @@ func (f Field) Sum() SumNode { return f.sum(f) }
 func (f Field) Max() MaxNode { return f.max(f) }
 
 func (f Field) Min() MinNode { return f.min(f) }
+
+func (f Field) Avg() AvgNode { return f.avg(f) }

@@ -43,9 +43,9 @@ func (n MinNode) Visit(v Visitor) (s string) {
 	return
 }
 
-type Avg struct{ Function }
+type AvgNode struct{ Function }
 
-func (n Avg) Visit(v Visitor) (s string) {
+func (n AvgNode) Visit(v Visitor) (s string) {
 	s = v.GetAvg(n)
 	return
 }
@@ -61,3 +61,4 @@ func (n CountNode) As(literal string) CountNode { n.as(literal); return n }
 func (n SumNode) As(literal string) SumNode     { n.as(literal); return n }
 func (n MaxNode) As(literal string) MaxNode     { n.as(literal); return n }
 func (n MinNode) As(literal string) MinNode     { n.as(literal); return n }
+func (n AvgNode) As(literal string) AvgNode     { n.as(literal); return n }
