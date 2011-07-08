@@ -162,10 +162,18 @@ func TestGetOr(t *testing.T) {
 
 func TestGetAs(t *testing.T) {
 	v := new(ToSql)
-	n := new(As)
+	connection, _ := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+	v.Connection = connection
+	tableSchema, _ := v.Connection.GetTable("Users")
+	table := Table{tableSchema, []Node{}}
+	table_alias := NewTableAlias(&table, NewSqlLiteralPointer("u"))
+	f := table_alias.GetField("id")
+	foo := NewSqlLiteral("foo")
+	n := As{Binary{&f, &foo}}
 
-	s := v.GetAs(*n)
-	if s != "" {
+	s := v.GetAs(n)
+	if s != "`u`.`id` AS foo" {
+		t.Log(s)
 		t.Errorf("failed to get As ")
 	}
 }

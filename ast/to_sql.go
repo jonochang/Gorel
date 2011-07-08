@@ -177,7 +177,7 @@ func (c *ToSql) GetAs(n As) (s string) {
 		rs = n.Right.Visit(c)
 	}
 
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("%v AS %v", ls, rs)
 	return
 }
 
