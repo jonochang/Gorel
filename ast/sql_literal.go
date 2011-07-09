@@ -22,3 +22,7 @@ func NewSqlLiteralPointer(value string) *SqlLiteral {
 func (s SqlLiteral) Count() CountNode { return s.count(s, false) }
 
 func (s SqlLiteral) CountDistinct() CountNode { return s.count(s, true) }
+
+func (s SqlLiteral) Ascending() Ascending { return Ascending{Unary{s}} }
+
+func (s SqlLiteral) Descending() Descending { return Descending{Unary{s}} }

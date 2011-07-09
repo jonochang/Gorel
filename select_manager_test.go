@@ -90,6 +90,72 @@ func TestSelectManagerOrder(t *testing.T) {
 	}
 }
 
+func TestSelectManagerOrderAscending(t *testing.T) {
+	connection, err := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+
+	if err != nil {
+		t.Log(err.String())
+	}
+
+	table, err := GetTable("Users", connection)
+	m1 := NewSelectManagerFromTable(-1, connection, table.Table)
+	m2 := m1
+	m3 := m1
+	m1.Order(table.Field("id").Ascending())
+	s := m1.ToSql()
+	if s != "SELECT FROM `Users`  ORDER BY `Users`.`id` ASC" {
+		t.Log(s)
+		t.Errorf("Failed to get Order On for select manager ASC")
+	}
+
+	m2.Order([]ast.Node{table.Field("id").Ascending(), ast.NewSqlLiteral("login").Ascending()}...)
+	s = m2.ToSql()
+	if s != "SELECT FROM `Users`  ORDER BY `Users`.`id` ASC, login ASC" {
+		t.Log(s)
+		t.Errorf("Failed to get Order For for select manager ASC")
+	}
+
+	m3.Order([]ast.Node{table.Field("id").Ascending(), ast.NewSqlLiteral("login").Descending()}...)
+	s = m3.ToSql()
+	if s != "SELECT FROM `Users`  ORDER BY `Users`.`id` ASC, login DESC" {
+		t.Log(s)
+		t.Errorf("Failed to get Order For for select manager ASC/DESC")
+	}
+}
+
+func TestSelectManagerOrderDescending(t *testing.T) {
+	connection, err := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
+
+	if err != nil {
+		t.Log(err.String())
+	}
+
+	table, err := GetTable("Users", connection)
+	m1 := NewSelectManagerFromTable(-1, connection, table.Table)
+	m2 := m1
+	m3 := m1
+	m1.Order(table.Field("id").Descending())
+	s := m1.ToSql()
+	if s != "SELECT FROM `Users`  ORDER BY `Users`.`id` DESC" {
+		t.Log(s)
+		t.Errorf("Failed to get Order On for select manager DESC")
+	}
+
+	m2.Order([]ast.Node{table.Field("id").Descending(), ast.NewSqlLiteral("login").Descending()}...)
+	s = m2.ToSql()
+	if s != "SELECT FROM `Users`  ORDER BY `Users`.`id` DESC, login DESC" {
+		t.Log(s)
+		t.Errorf("Failed to get Order For for select manager DESC")
+	}
+
+	m3.Order([]ast.Node{table.Field("id").Descending(), ast.NewSqlLiteral("login").Ascending()}...)
+	s = m3.ToSql()
+	if s != "SELECT FROM `Users`  ORDER BY `Users`.`id` DESC, login ASC" {
+		t.Log(s)
+		t.Errorf("Failed to get Order For for select manager DESC/ASC")
+	}
+}
+
 func TestSelectManagerOffset(t *testing.T) {
 	connection, err := db.MySQLNewConnection(DB_SOCK, DB_USER, DB_PASSWD, DB_NAME)
 

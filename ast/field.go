@@ -30,3 +30,7 @@ func (f Field) Max() MaxNode { return f.max(f) }
 func (f Field) Min() MinNode { return f.min(f) }
 
 func (f Field) Avg() AvgNode { return f.avg(f) }
+
+func (f Field) Ascending() Ascending { return Ascending{Unary{f}} }
+
+func (f Field) Descending() Descending { return Descending{Unary{f}} }
