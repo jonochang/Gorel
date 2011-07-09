@@ -296,6 +296,16 @@ func (c *ToSql) GetAscending(n Ascending) (s string) {
 	return
 }
 
+func (c *ToSql) GetDescending(n Descending) (s string) {
+	expr := ""
+	if n.Expression != nil {
+		expr = n.Expression.Visit(c)
+	}
+
+	s = fmt.Sprintf("%v DESC", expr)
+	return
+}
+
 func (c *ToSql) GetValues(n Values) (s string) {
 	ls := ""
 	if n.Left != nil {

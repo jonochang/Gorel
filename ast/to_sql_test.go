@@ -286,19 +286,68 @@ func TestGetAscending(t *testing.T) {
 		t.Errorf("failed to get Ascending ")
 	}
 
-	if n.IsAscending() != true {
-		t.Log(n.IsAscending())
+	var i Ordering
+	i = n
+
+	if i.IsAscending() != true {
+		t.Log(i.IsAscending())
 		t.Errorf("failed to get Ascending.IsAscending()")
 	}
 
-	if n.IsDescending() != false {
-		t.Log(n.IsDescending())
+	if i.IsDescending() != false {
+		t.Log(i.IsDescending())
 		t.Errorf("failed to get Ascending.IsDescending()")
 	}
 
-	if n.Direction() != "ASC" {
-		t.Log(n.Direction())
+	if i.Direction() != "ASC" {
+		t.Log(i.Direction())
 		t.Errorf("failed to get Ascending.Direction()")
+	}
+
+	var d Ordering
+	d = i.Reverse()
+
+	if d.Direction() != "DESC" {
+		t.Log(d.Direction())
+		t.Errorf("failed to get Ascending.Reverse()")
+	}
+}
+
+func TestGetDescending(t *testing.T) {
+	v := new(ToSql)
+	foo := NewSqlLiteral("foo")
+	n := Descending{Unary{foo}}
+
+	s := v.GetDescending(n)
+	if s != "foo DESC" {
+		t.Log(s)
+		t.Errorf("failed to get Descending ")
+	}
+
+	var i Ordering
+	i = n
+
+	if i.IsAscending() != false {
+		t.Log(i.IsAscending())
+		t.Errorf("failed to get Descending.IsAscending()")
+	}
+
+	if i.IsDescending() != true {
+		t.Log(i.IsDescending())
+		t.Errorf("failed to get Descending.IsDescending()")
+	}
+
+	if i.Direction() != "DESC" {
+		t.Log(i.Direction())
+		t.Errorf("failed to get Descending.Direction()")
+	}
+
+	var a Ordering
+	a = i.Reverse()
+
+	if a.Direction() != "ASC" {
+		t.Log(a.Direction())
+		t.Errorf("failed to get Descending.Reverse()")
 	}
 }
 

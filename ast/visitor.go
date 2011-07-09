@@ -71,4 +71,5 @@ type Visitor interface {
 	GetSelectStatement(n SelectStatement) string
 	GetWith(n With) string
 	GetAscending(n Ascending) string
+	GetDescending(n Descending) string
 }
