@@ -20,7 +20,6 @@ type Visitor interface {
 	GetMatches(n Matches) string
 	GetDoesNotMatch(n DoesNotMatch) string
 	GetNotIn(n NotIn) string
-	GetOrdering(n Ordering) string
 	GetValues(n Values) string
 	GetDeleteStatement(n DeleteStatement) string
 	GetTableAlias(n TableAlias) string
@@ -71,4 +70,5 @@ type Visitor interface {
 	GetSqlLiteral(n SqlLiteral) string
 	GetSelectStatement(n SelectStatement) string
 	GetWith(n With) string
+	GetAscending(n Ascending) string
 }

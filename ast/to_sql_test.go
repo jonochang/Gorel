@@ -275,15 +275,33 @@ func TestGetNotIn(t *testing.T) {
 	}
 }
 
-func TestGetOrdering(t *testing.T) {
+func TestGetAscending(t *testing.T) {
 	v := new(ToSql)
-	n := new(Ordering)
+	foo := NewSqlLiteral("foo")
+	n := Ascending{Unary{foo}}
 
-	s := v.GetOrdering(*n)
-	if s != "" {
-		t.Errorf("failed to get Ordering ")
+	s := v.GetAscending(n)
+	if s != "foo ASC" {
+		t.Log(s)
+		t.Errorf("failed to get Ascending ")
+	}
+
+	if n.IsAscending() != true {
+		t.Log(n.IsAscending())
+		t.Errorf("failed to get Ascending.IsAscending()")
+	}
+
+	if n.IsDescending() != false {
+		t.Log(n.IsDescending())
+		t.Errorf("failed to get Ascending.IsDescending()")
+	}
+
+	if n.Direction() != "ASC" {
+		t.Log(n.Direction())
+		t.Errorf("failed to get Ascending.Direction()")
 	}
 }
+
 func TestGetValues(t *testing.T) {
 	v := new(ToSql)
 	n := new(Values)

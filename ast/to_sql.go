@@ -286,18 +286,13 @@ func (c *ToSql) GetNotIn(n NotIn) (s string) {
 	return
 }
 
-func (c *ToSql) GetOrdering(n Ordering) (s string) {
-	ls := ""
-	if n.Left != nil {
-		ls = n.Left.Visit(c)
+func (c *ToSql) GetAscending(n Ascending) (s string) {
+	expr := ""
+	if n.Expression != nil {
+		expr = n.Expression.Visit(c)
 	}
 
-	rs := ""
-	if n.Right != nil {
-		rs = n.Right.Visit(c)
-	}
-
-	s = fmt.Sprintf("%v * %v", ls, rs)
+	s = fmt.Sprintf("%v ASC", expr)
 	return
 }
 

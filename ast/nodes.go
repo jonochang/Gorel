@@ -137,13 +137,6 @@ func (n NotIn) Visit(v Visitor) (s string) {
 	return
 }
 
-type Ordering struct{ Binary }
-
-func (n Ordering) Visit(v Visitor) (s string) {
-	s = v.GetOrdering(n)
-	return
-}
-
 type Values struct{ Binary }
 
 func (n Values) Visit(v Visitor) (s string) {
